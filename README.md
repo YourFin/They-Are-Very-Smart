@@ -1,2 +1,2 @@
-# They-Are-Very-Smart
+# They Are Very Smart
 CSC 295 Project
