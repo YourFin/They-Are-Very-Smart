@@ -207,9 +207,8 @@ namespace TowerDefense.Targetting
 			{
 				targetExitsRange(targetable);
 			}
-			if (targetable == m_CurrrentTargetable)
-			{
-				OnTargetRemoved(targetable);
+			if (targetable == m_CurrrentTargetable) {
+                OnTargetRemoved(targetable);
 			}
 			else
 			{

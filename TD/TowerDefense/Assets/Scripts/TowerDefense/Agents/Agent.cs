@@ -233,7 +233,7 @@ namespace TowerDefense.Agents
 		}
 		
 		/// <summary>
-		/// Lazy Load, if necesaary and ensure the NavMeshAgent is disabled
+		/// Lazy Load, if necessary and ensure the NavMeshAgent is disabled
 		/// </summary>
 		protected override void Awake()
 		{

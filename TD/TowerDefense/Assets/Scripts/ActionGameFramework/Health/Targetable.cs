@@ -20,6 +20,8 @@ namespace ActionGameFramework.Health
 
 		/// <summary>
 		/// The velocity of the rigidbody
+		/// Not used to calculate movement of object,
+		/// used for targeting calculations
 		/// </summary>
 		public virtual Vector3 velocity { get; protected set; }
 		
