@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using ActionGameFramework.Health;
 
 namespace Evolution
 {
@@ -63,9 +66,18 @@ namespace Evolution
             return new Genome(this.health, this.damage, this.movementSpeed);
         }
 
-        public Vector3 CalculateDirection(int time_alive, bool is_dealing_damage, float previous_direction, int health, List<Targetable> nearby)
+        /// <summary>
+        /// Calcualtes the direction that the genome would have the zombie move
+        /// </summary>
+        /// <param name="time_alive"></param>
+        /// <param name="is_dealing_damage"></param>
+        /// <param name="previous_direction">The last direction the zombie was moving</param>
+        /// <param name="health">current health of the zombie</param>
+        /// <param name="nearby">dictionary from nearby entities mapped to the vector to them</param>
+        /// <returns>direction, The direction to move in</returns>
+        public float CalculateDirection(int time_alive, bool is_dealing_damage, float previous_direction, int health, Dictionary<Targetable, Vector3> nearby)
         {
-            return new Vector3();
+            return 0f;
         }
     }
 }

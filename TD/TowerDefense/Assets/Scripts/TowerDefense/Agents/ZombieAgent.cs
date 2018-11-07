@@ -7,10 +7,12 @@ using TowerDefense.Nodes;
 using UnityEngine;
 using UnityEngine.AI;
 using Evolution;
+using Core.Health;
 // Will include neural net
 
 namespace TowerDefense.Agents
 {
+    [RequireComponent(typeof(AttackAffector))]
     public class ZombieAgent : Targetable
     {
         // Fix whatever this is mad about
@@ -28,6 +30,10 @@ namespace TowerDefense.Agents
             protected set;
         }
 
+        public readonly IAlignmentProvider alignment;
+
+        // Get alignment of zombie with this.configuration.alignment
+
         private Genome genome;
         private int time_alive = 0;
 
@@ -35,13 +41,18 @@ namespace TowerDefense.Agents
 		/// Setup all the necessary parameters for this agent from configuration data
 		/// </summary>
         public void Initialize() {
-            lastVelocity = new Vector3(0,0,0);
+            this.lastVelocity = new Vector3(0,0,0);
+
         }
+
+        // Damage hits the Damageable behavior corresponding to the enitiy being attacked
+        //
+        // Also need to calculate the damage point on the object, look into damager for
+        // how to calculate the damagepoint
 
         public void FixedUpdate()
         {
             this.time_alive += 1;
         }
-        
     }
 }
