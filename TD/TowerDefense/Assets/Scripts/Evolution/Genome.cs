@@ -40,6 +40,8 @@ namespace Evolution
                 return MOVEMENT_SCALE * (float)this.movementSpeed; 
             }
         }
+
+
         // Insert NN here
 
         public Genome(int health, int damage, int movementSpeed)
