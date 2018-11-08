@@ -1,15 +1,9 @@
-using System;
-using System.Collections;
 using ActionGameFramework.Health;
-using Core.Utilities;
 using TowerDefense.Affectors;
 using TowerDefense.Level;
-using TowerDefense.Nodes;
 using UnityEngine;
-using UnityEngine.AI;
 using Evolution;
 using Core.Health;
-using Util;
 
 namespace TowerDefense.Agents
 {
