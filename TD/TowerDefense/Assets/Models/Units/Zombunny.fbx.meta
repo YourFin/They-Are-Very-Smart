@@ -90,12 +90,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: EyesMaterial
-    second: {fileID: 2100000, guid: 51d14e0fd3936be48bf8d5031d3e24c7, type: 2}
+    second: {fileID: 2100000, guid: 636bb2fababf4a1429dab7bc35b1dbee, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: ZombunnyMaterial
-    second: {fileID: 2100000, guid: 90309a9ae07af7a4baf27031c594f369, type: 2}
+    second: {fileID: 2100000, guid: 239d405913b354b4f84fc8da2b2ba52e, type: 2}
   materials:
     importMaterials: 1
     materialName: 1
@@ -354,14 +354,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.83458644
-        functionName: StartSinking
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1

@@ -13,18 +13,24 @@ namespace Evolution
         
         private readonly int total;
 
-        private static uint current_id = 0;
+        private static int current_id = 0;
+
+        private static int id_counter = 0;
+
+        private int id;
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+        }
 
         private int health;
         public int Health { 
             get {
                 return HEALTH_SCALE * this.health;
             }
-        }
-
-        public uint Id
-        {
-            get; private set;
         }
 
         private int damage;
@@ -50,7 +56,7 @@ namespace Evolution
             this.damage = damage;
             this.movementSpeed = movementSpeed;
             this.total = damage + health + movementSpeed;
-            this.Id = current_id;
+            id = current_id;
             current_id++;
         }
 

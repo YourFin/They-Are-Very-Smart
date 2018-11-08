@@ -10,7 +10,7 @@ namespace TowerDefense.Level
         /// <summary>
         /// How many zombunnies to spawn
         /// </summary>
-        public readonly int POPULATION_SIZE = 100;
+        public readonly int POPULATION_SIZE = 10;
 
         /// <summary>
         /// The mutation rate
@@ -52,6 +52,7 @@ namespace TowerDefense.Level
             {
                 currentMap.Add(new Genome(20, 4, 2), 0.0);
             }
+            print(currentMap.Count);
         }
 
         private void NextWave()
@@ -63,6 +64,7 @@ namespace TowerDefense.Level
                 nextWave.Push(pair.Key);
             }
             //Possibly scramble list here?
+            print(nextWave.Count);
 
             //Reset values
             remaining_alive = POPULATION_SIZE;
@@ -85,12 +87,16 @@ namespace TowerDefense.Level
         //private void Spawn(Genome genome, ZombieAgent prefabAgent)
         private void Spawn()
         {
+            if(toSpawn.Count == 0)
+            {
+                CancelInvoke("Spawn");
+            }
             int spawn_index = Random.Range(0, SpawnPoints.Count - 1);
 
             // TODO: Figure out pools!
             var prefabInstance = Instantiate(ZombiePrefab, SpawnPoints[spawn_index]);
             var agentInstance = prefabInstance.GetComponent<ZombieAgent>();
-            agentInstance.genome = toSpawn.Pop();
+            agentInstance.Genome = toSpawn.Pop();
             agentInstance.removed += (_) =>
             {
                 ZombieDied(agentInstance);
@@ -101,7 +107,8 @@ namespace TowerDefense.Level
         public void ZombieDied(ZombieAgent agent)
         {
             --remaining_alive;
-            currentMap.Add(agent.genome, agent.Fitness);
+            currentMap.Add(agent.Genome, agent.Fitness);
+            print(remaining_alive);
             if (remaining_alive == 0)
             {
                 NextWave();

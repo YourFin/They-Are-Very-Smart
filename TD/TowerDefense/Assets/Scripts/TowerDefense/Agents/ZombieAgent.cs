@@ -23,13 +23,15 @@ namespace TowerDefense.Agents
         private readonly float SINK_SPEED = 2.5f;
         private readonly float SINK_TIME = 2.0f;
 
+        private float speed;
+
         public override Vector3 velocity
         {
             // Previous velocity set by Neural Net
             get { return lastVelocity.toVector3(); }
         }
         private PolarVector lastVelocity;
-
+        
         protected LevelManager m_LevelManager;
 
         public double Fitness {
@@ -48,8 +50,22 @@ namespace TowerDefense.Agents
         public float CurrentHealth = 0.1f;
 
         // Get alignment of zombie with this.configuration.alignment
-
-        public Genome genome { get; set; }
+        private Genome genome;
+        public Genome Genome {
+            get
+            {
+                return genome;
+            }
+            set
+            {
+                this.lastVelocity = new PolarVector(0, 1f);
+                genome = value;
+                var health = genome.Health;
+                configuration.SetMaxHealth(health);
+                configuration.SetHealth(health);
+                lastVelocity.magnitude = genome.MovementSpeed;
+            }
+        }
         private int time_alive = 0;
         private float time_dead = 0;
 
@@ -63,8 +79,11 @@ namespace TowerDefense.Agents
         /// Setup all the necessary parameters for this agent from configuration data
         /// </summary>
         public void Start() {
-            this.lastVelocity = new PolarVector(0, 1f);
             genome = new Genome(50, 1, 1);
+            if (lastVelocity == null)
+            {
+                this.lastVelocity = new PolarVector(0, 1f);
+            }
         }
 
         // Damage hits the Damageable behavior corresponding to the enitiy being attacked
