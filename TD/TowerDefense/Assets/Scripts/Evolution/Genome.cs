@@ -28,7 +28,7 @@ namespace Evolution
         }
 
         private int damage;
-        public int Damage { 
+        public int Damage {
             get {
                 return DAMAGE_SCALE * this.damage;
             }
@@ -42,7 +42,7 @@ namespace Evolution
         }
         // Insert NN here
 
-        Genome(int health, int damage, int movementSpeed)
+        public Genome(int health, int damage, int movementSpeed)
         {
             this.health = health;
             this.damage = damage;
@@ -75,9 +75,9 @@ namespace Evolution
         /// <param name="health">current health of the zombie</param>
         /// <param name="nearby">dictionary from nearby entities mapped to the vector to them</param>
         /// <returns>direction, The direction to move in</returns>
-        public float CalculateDirection(int time_alive, bool is_dealing_damage, float previous_direction, int health, Dictionary<Targetable, Vector3> nearby)
+        public float CalculateDirection(PolarVector previous_direction, int time_alive, float health, Dictionary<Targetable, PolarVector> nearby)
         {
-            return 0f;
+            return 3f;
         }
     }
 }

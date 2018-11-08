@@ -1,59 +1,67 @@
 ﻿using UnityEngine;
 using System;
 
-public class PolarVector
+namespace Evolution
 {
-    public float direction;
-    public float magnitude;
-
-    PolarVector(float direction, float magnitude)
+    public class PolarVector
     {
-        this.direction = direction;
-        this.magnitude = direction;
-    }
+        public float direction;
+        public float magnitude;
 
-    PolarVector(float direction)
-    {
-        this.direction = direction;
-        magnitude = 0;
-    }
+        public PolarVector(float direction, float magnitude)
+        {
+            this.direction = direction;
+            this.magnitude = magnitude;
+        }
 
-    PolarVector()
-    {
-        direction = 0;
-        magnitude = 0;
-    }
+        public PolarVector(float direction)
+        {
+            this.direction = direction;
+            magnitude = 0;
+        }
 
-    public static double DegToRad(float degrees)
-    {
-        double CONVERSION_FACTOR = (Math.PI / 180);
-        return degrees * CONVERSION_FACTOR;
-    }
+        public PolarVector()
+        {
+            direction = 0;
+            magnitude = 0;
+        }
 
-    public PolarVector makeRelative(PolarVector toTransform)
-    {
-        return new PolarVector(toTransform.direction, toTransform.magnitude);
-    }
+        public static double DegToRad(float degrees)
+        {
+            double CONVERSION_FACTOR = (Math.PI / 180);
+            return degrees * CONVERSION_FACTOR;
+        }
 
-    private static readonly Vector3 E1 = new Vector3(1, 0, 0);
-    public PolarVector fromVector3(Vector3 vv)
-    {
-        Vector3 withoutY = new Vector3(vv.x, 0, vv.z);
-        return new PolarVector(withoutY.magnitude, Vector3.Angle(E1, withoutY));
-    }
+        public PolarVector makeRelative(PolarVector toTransform)
+        {
+            return new PolarVector(toTransform.direction, toTransform.magnitude);
+        }
 
-    public Vector3 toVector3()
-    {
-        return new Vector3(
-                (float)Math.Cos(DegToRad(direction)) * magnitude,
-                0.0f,
-                (float)Math.Sin(DegToRad(direction)) * magnitude
-                );
-    }
+        public float Rotate(float degrees_to_rotate)
+        {
+            direction += degrees_to_rotate;
+            return direction;
+        }
 
-    public static Vector3 toVector3(PolarVector vv)
-    {
-        return vv.toVector3();
-    }
+        private static readonly Vector3 E1 = new Vector3(1, 0, 0);
+        public PolarVector fromVector3(Vector3 vv)
+        {
+            Vector3 withoutY = new Vector3(vv.x, 0, vv.z);
+            return new PolarVector(withoutY.magnitude, Vector3.Angle(E1, withoutY));
+        }
 
+        public Vector3 toVector3()
+        {
+            return new Vector3(
+                    (float)Math.Cos(DegToRad(direction)) * magnitude,
+                    0.0f,
+                    (float)Math.Sin(DegToRad(direction)) * magnitude
+                    );
+        }
+
+        public static Vector3 toVector3(PolarVector vv)
+        {
+            return vv.toVector3();
+        }
+    }
 }

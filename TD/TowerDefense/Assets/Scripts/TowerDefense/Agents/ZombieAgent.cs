@@ -12,16 +12,19 @@ using Core.Health;
 
 namespace TowerDefense.Agents
 {
-    [RequireComponent(typeof(AttackAffector))]
+    [RequireComponent(typeof(AttackAffector)), 
+        RequireComponent(typeof(Collider)), 
+        RequireComponent(typeof(Collider)),
+        RequireComponent(typeof(Rigidbody))]
     public class ZombieAgent : Targetable
     {
         // Fix whatever this is mad about
         public override Vector3 velocity
         {
             // Previous velocity set by Neural Net
-            get { return lastVelocity; }
+            get { return lastVelocity.toVector3(); }
         }
-        private Vector3 lastVelocity;
+        private PolarVector lastVelocity;
 
         protected LevelManager m_LevelManager;
 
@@ -31,6 +34,9 @@ namespace TowerDefense.Agents
         }
 
         public readonly IAlignmentProvider alignment;
+        public Collider visionCollider;
+        public Collider damageCollider;
+        public Rigidbody rigidBody;
 
         // Get alignment of zombie with this.configuration.alignment
 
@@ -40,8 +46,9 @@ namespace TowerDefense.Agents
 		/// <summary>	
 		/// Setup all the necessary parameters for this agent from configuration data
 		/// </summary>
-        public void Initialize() {
-            this.lastVelocity = new Vector3(0,0,0);
+        public void Start() {
+            this.lastVelocity = new PolarVector(0, 1f);
+            genome = new Genome(50, 1, 1);
 
         }
 
@@ -52,7 +59,16 @@ namespace TowerDefense.Agents
 
         public void FixedUpdate()
         {
-            this.time_alive += 1;
+            time_alive += 1;
+            lastVelocity.Rotate(genome.CalculateDirection(
+                lastVelocity, 
+                time_alive, 
+                configuration.currentHealth, 
+                new System.Collections.Generic.Dictionary<Targetable, PolarVector>()));
+            rigidBody.MoveRotation(Quaternion.LookRotation(lastVelocity.toVector3()));
+            rigidBody.MovePosition(
+                transform.position + 
+                (lastVelocity.toVector3() * Time.deltaTime));
         }
     }
 }

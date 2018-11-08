@@ -85,7 +85,12 @@ ModelImporter:
     7400000: Take 001
     9500000: //RootNode
     13700000: Zombunny
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ZombunnyMaterial
+    second: {fileID: 2100000, guid: 476f037de401389449e12e0d6f8470ba, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
