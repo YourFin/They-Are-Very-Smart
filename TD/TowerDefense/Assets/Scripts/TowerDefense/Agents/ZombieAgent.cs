@@ -10,7 +10,6 @@ using UnityEngine.AI;
 using Evolution;
 using Core.Health;
 using Util;
-// Will include neural net
 
 namespace TowerDefense.Agents
 {
@@ -24,7 +23,6 @@ namespace TowerDefense.Agents
         private readonly float SINK_SPEED = 2.5f;
         private readonly float SINK_TIME = 2.0f;
 
-        // Fix whatever this is mad about
         public override Vector3 velocity
         {
             // Previous velocity set by Neural Net
@@ -47,11 +45,11 @@ namespace TowerDefense.Agents
 
         private bool myIsDead = false;
         // For debug purposes only
-        public float CurrentHealth = 0.0f;
+        public float CurrentHealth = 0.1f;
 
         // Get alignment of zombie with this.configuration.alignment
 
-        private Genome genome;
+        public Genome genome { get; set; }
         private int time_alive = 0;
         private float time_dead = 0;
 
@@ -82,8 +80,8 @@ namespace TowerDefense.Agents
                 time_dead += Time.deltaTime;
                 if (time_dead > SINK_TIME)
                 {
-                    // TODO: calculate fitness
-                    Poolable.TryPool(gameObject);
+                    //Poolable.TryPool(gameObject);
+                    Destroy(gameObject);
                 } else {
                     transform.Translate(
                         -Vector3.up * SINK_SPEED * Time.deltaTime
@@ -92,11 +90,13 @@ namespace TowerDefense.Agents
                 return;
             }
             time_alive += 1;
-            lastVelocity.Rotate(genome.CalculateDirection(
+            lastVelocity.Rotate(
+                genome.CalculateDirection(
                 lastVelocity, 
                 time_alive, 
                 configuration.currentHealth, 
                 new System.Collections.Generic.Dictionary<Targetable, PolarVector>()));
+
             rigidBody.MoveRotation(Quaternion.LookRotation(lastVelocity.toVector3()));
             rigidBody.MovePosition(
                 transform.position + 
