@@ -17,7 +17,7 @@ namespace TowerDefense.Level
         /// </summary>
         public readonly float MUTATION_RATE = 0.2f;
 
-        public readonly float SPAWN_DELAY = 0.75f;
+        public readonly float SPAWN_DELAY = 2f;
 
         /// <summary>
         /// The prefab to spawn as an enemy

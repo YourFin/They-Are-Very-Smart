@@ -85,7 +85,7 @@ namespace Evolution
         /// <returns>direction, The direction to move in</returns>
         public float CalculateDirection(PolarVector previous_direction, int time_alive, float health, Dictionary<Targetable, PolarVector> nearby)
         {
-            return 3f;
+            return 0f;
         }
     }
 }

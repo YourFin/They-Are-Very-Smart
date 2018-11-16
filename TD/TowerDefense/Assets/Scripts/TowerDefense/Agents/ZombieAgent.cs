@@ -42,6 +42,7 @@ namespace TowerDefense.Agents
         public readonly IAlignmentProvider alignment;
         public Collider visionCollider;
         public Collider damageCollider;
+        public Collider attackCollider;
         public Rigidbody rigidBody;
         public Animator anim;
 
@@ -58,7 +59,8 @@ namespace TowerDefense.Agents
             }
             set
             {
-                this.lastVelocity = new PolarVector(0, 1f);
+                //this.lastVelocity = PolarVector.fromVector3(transform.rotation.eulerAngles);
+                lastVelocity = new PolarVector(270);
                 genome = value;
                 var health = genome.Health;
                 configuration.SetMaxHealth(health);
@@ -93,6 +95,7 @@ namespace TowerDefense.Agents
 
         public void FixedUpdate()
         {
+
             Vector3 current_pos = transform.position;
             if (myIsDead)
             {
@@ -108,6 +111,10 @@ namespace TowerDefense.Agents
                 }
                 return;
             }
+            // Handle attacking
+
+
+            // Handle Movement
             time_alive += 1;
             lastVelocity.Rotate(
                 genome.CalculateDirection(

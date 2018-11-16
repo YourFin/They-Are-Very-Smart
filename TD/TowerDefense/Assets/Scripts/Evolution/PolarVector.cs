@@ -44,7 +44,7 @@ namespace Evolution
         }
 
         private static readonly Vector3 E1 = new Vector3(1, 0, 0);
-        public PolarVector fromVector3(Vector3 vv)
+        public static PolarVector fromVector3(Vector3 vv)
         {
             Vector3 withoutY = new Vector3(vv.x, 0, vv.z);
             return new PolarVector(withoutY.magnitude, Vector3.Angle(E1, withoutY));
