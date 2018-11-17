@@ -84,7 +84,6 @@ namespace TowerDefense.Level
             //}
         }
 
-        //private void Spawn(Genome genome, ZombieAgent prefabAgent)
         private void Spawn()
         {
             if(toSpawn.Count == 0)

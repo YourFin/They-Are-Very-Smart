@@ -7,18 +7,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class ZombieAttacker : MonoBehaviour {
 
-    //public Collider AttackCollider;
-    public ZombieAgent ZombieAgent;
+   public ZombieAgent ZombieAgent;
 
     private HashSet<Targetable> toAttack;
 
     // Use this for initialization
     void Start()
     {
-        //if (AttackCollider == null)
-        //{
-        //    throw new System.Exception("Add a damage collider you nitwit");
-        //}
+
         ZombieAgent = GetComponentInParent<ZombieAgent>();
         toAttack = new HashSet<Targetable>();
     }

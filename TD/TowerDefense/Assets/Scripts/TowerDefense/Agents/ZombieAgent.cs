@@ -4,6 +4,7 @@ using TowerDefense.Level;
 using UnityEngine;
 using Evolution;
 using Core.Health;
+using System.Collections.Generic;
 
 namespace TowerDefense.Agents
 {
@@ -32,6 +33,8 @@ namespace TowerDefense.Agents
             get;
             protected set;
         }
+
+        private HashSet<Targetable> inVision;
 
         public readonly IAlignmentProvider alignment;
         public Collider visionCollider;
@@ -75,11 +78,23 @@ namespace TowerDefense.Agents
         /// Setup all the necessary parameters for this agent from configuration data
         /// </summary>
         public void Start() {
+            inVision = new HashSet<Targetable>();
             genome = new Genome(50, 1, 1);
             if (lastVelocity == null)
             {
                 this.lastVelocity = new PolarVector(0, 1f);
             }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            inVision.Add(other.gameObject.GetComponent<Targetable>());
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            Targetable leavingTargetable = other.gameObject.GetComponent<Targetable>();
+            inVision.Remove(leavingTargetable);
         }
 
         // Damage hits the Damageable behavior corresponding to the enitiy being attacked
@@ -105,17 +120,30 @@ namespace TowerDefense.Agents
                 }
                 return;
             }
-            // Handle attacking
+            time_alive += 1;
+
+            // Find path to nearby objects
+            var nearbyDict = new Dictionary<Targetable, PolarVector>();
+            foreach(var item in inVision)
+            {
+                if (item == null) continue;
+                nearbyDict.Add(
+                    item,
+                    new PolarVector(
+                            (- lastVelocity.direction) + Vector3.Angle(transform.position, item.gameObject.transform.position),
+                            Vector3.Distance(transform.position, item.gameObject.transform.position)
+                        )
+                 );
+            }
 
 
             // Handle Movement
-            time_alive += 1;
             lastVelocity.Rotate(
                 genome.CalculateDirection(
                 lastVelocity, 
                 time_alive, 
                 configuration.currentHealth, 
-                new System.Collections.Generic.Dictionary<Targetable, PolarVector>()));
+                nearbyDict));
 
             rigidBody.MoveRotation(Quaternion.LookRotation(lastVelocity.toVector3()));
             rigidBody.MovePosition(
