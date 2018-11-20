@@ -14,7 +14,6 @@ public class ZombieAttacker : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
         ZombieAgent = GetComponentInParent<ZombieAgent>();
         toAttack = new HashSet<Targetable>();
     }

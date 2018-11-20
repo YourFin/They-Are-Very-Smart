@@ -61,6 +61,7 @@ namespace TowerDefense.Level
             // Reproduce Here! dict -> list
             foreach (var pair in currentMap)
             {
+                if (pair.Key == null) continue;
                 nextWave.Push(pair.Key);
             }
             //Possibly scramble list here?
@@ -78,19 +79,15 @@ namespace TowerDefense.Level
             prefabAgent = ZombiePrefab.GetComponent<ZombieAgent>();
             //Spawn next wave
             InvokeRepeating("Spawn", SPAWN_DELAY, SPAWN_DELAY);
-            //foreach (var genome in nextWave)
-            //{
-            //    Spawn(genome, prefabAgent);
-            //}
         }
 
         private void Spawn()
         {
-            if(toSpawn.Count == 0)
+            if(toSpawn.Count == 1)
             {
                 CancelInvoke("Spawn");
             }
-            int spawn_index = Random.Range(0, SpawnPoints.Count - 1);
+            int spawn_index = Random.Range(0, SpawnPoints.Count);
 
             // TODO: Figure out pools!
             var prefabInstance = Instantiate(ZombiePrefab, SpawnPoints[spawn_index]);
