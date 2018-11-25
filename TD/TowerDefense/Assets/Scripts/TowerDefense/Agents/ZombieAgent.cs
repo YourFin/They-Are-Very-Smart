@@ -15,8 +15,8 @@ namespace TowerDefense.Agents
         RequireComponent(typeof(Animator))]
     public class ZombieAgent : Targetable
     {
-        private readonly float SINK_SPEED = 2.5f;
-        private readonly float SINK_TIME = 2.0f;
+        private readonly static float SINK_SPEED = 2.5f;
+        private readonly static float SINK_TIME = 2.0f;
 
         private float speed;
 
@@ -85,7 +85,7 @@ namespace TowerDefense.Agents
         /// </summary>
         public void Start() {
             inVision = new HashSet<Targetable>();
-            genome = new Genome(50, 1, 1);
+            genome = Genome.Zero();
             if (lastVelocity == null)
             {
                 this.lastVelocity = new PolarVector(0, 1f);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Evolution;
 using TowerDefense.Agents;
+using Redzen.Numerics.Distributions.Float;
 
 namespace TowerDefense.Level
 {
@@ -18,6 +19,8 @@ namespace TowerDefense.Level
         public readonly float MUTATION_RATE = 0.2f;
 
         public readonly float SPAWN_DELAY = 2f;
+
+        private readonly static float STARTING_TOTAL = 16;
 
         /// <summary>
         /// The prefab to spawn as an enemy
@@ -37,6 +40,8 @@ namespace TowerDefense.Level
         private Stack<Genome> toSpawn;
         private ZombieAgent prefabAgent;
 
+        private ZigguratGaussianSampler sampler;
+
         private void Start()
         {
             GenerateInitialGenomes();
@@ -48,9 +53,10 @@ namespace TowerDefense.Level
             genomeMaps = new List<Dictionary<Genome, double>>();
             genomeMaps.Add(new Dictionary<Genome, double>());
             currentMap = genomeMaps[0];
+            sampler = new ZigguratGaussianSampler(0, MUTATION_RATE);
             for (int index = 0; index < POPULATION_SIZE; ++index)
             {
-                currentMap.Add(new Genome(20, 4, 2), 0.0);
+                currentMap.Add(Genome.RandomGenome(sampler, STARTING_TOTAL), 0.0);
             }
             print(currentMap.Count);
         }
