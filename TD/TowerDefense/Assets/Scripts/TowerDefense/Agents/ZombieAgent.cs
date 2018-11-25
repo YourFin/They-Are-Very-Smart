@@ -46,6 +46,12 @@ namespace TowerDefense.Agents
         private bool myIsDead = false;
         // For debug purposes only
         public float CurrentHealth = 0.1f;
+        protected float damageDone = 0;
+
+        public void addDamageDone(float increment)
+        {
+            this.damageDone += increment;
+        }
 
         // Get alignment of zombie with this.configuration.alignment
         private Genome genome;

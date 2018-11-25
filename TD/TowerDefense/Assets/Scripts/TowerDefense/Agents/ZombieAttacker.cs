@@ -35,11 +35,14 @@ public class ZombieAttacker : MonoBehaviour {
         {
             if (item != null)
             {
+                var health = item.configuration.currentHealth;
                 item.TakeDamage(
                     ZombieAgent.Genome.Damage * Time.deltaTime,
                     ZombieAgent.transform.position,
                     ZombieAgent.configuration.alignmentProvider
                 );
+
+                this.ZombieAgent.addDamageDone(health - item.configuration.currentHealth);
             }
         }
     }
