@@ -60,7 +60,8 @@ namespace Evolution
                 totalStats = value;
                 var NUM_STATS = 3;
                 var sum = movementSpeed + damage + health + NUM_STATS - Mathf.Min(movementSpeed, damage, health);
-                divisor = totalStats/(sum);
+                divisor = totalStats / (sum);
+                MonoBehaviour.print("Movement Speed: " + MovementSpeed);
             }
         }
 

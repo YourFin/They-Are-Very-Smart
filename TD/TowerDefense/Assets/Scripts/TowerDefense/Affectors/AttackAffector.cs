@@ -143,8 +143,17 @@ namespace TowerDefense.Affectors
 
 		void OnDestroy()
 		{
-			towerTargetter.acquiredTarget -= OnAcquiredTarget;
-			towerTargetter.lostTarget -= OnLostTarget;
+            //TODO: Fix
+            try
+            {
+                towerTargetter.acquiredTarget -= OnAcquiredTarget;
+                towerTargetter.lostTarget -= OnLostTarget;
+            }
+            catch
+            {
+                return;
+            }
+			
 		}
 
 		void OnLostTarget()
@@ -252,8 +261,16 @@ namespace TowerDefense.Affectors
 		/// </summary>
 		void OnDrawGizmosSelected()
 		{
-			Gizmos.DrawWireSphere(epicenter.position, towerTargetter.effectRadius);
-		}
+            //TODO: Fix
+            try
+            {
+                Gizmos.DrawWireSphere(epicenter.position, towerTargetter.effectRadius);
+            } catch
+            {
+                return;
+            }
+
+        }
 #endif
 	}
 

@@ -18,9 +18,13 @@ namespace TowerDefense.Level
         /// </summary>
         public readonly float MUTATION_RATE = 0.2f;
 
+        public readonly float GROWTH_RATE = 0.3f;
+
         public readonly float SPAWN_DELAY = 2f;
 
-        private readonly static float STARTING_TOTAL = 16;
+        private readonly static float STARTING_TOTAL = 16f;
+
+        private readonly static double INITIAL_FITNESS = 0.0;
 
         /// <summary>
         /// The prefab to spawn as an enemy
@@ -56,9 +60,10 @@ namespace TowerDefense.Level
             sampler = new ZigguratGaussianSampler(0, MUTATION_RATE);
             for (int index = 0; index < POPULATION_SIZE; ++index)
             {
-                currentMap.Add(Genome.RandomGenome(sampler, STARTING_TOTAL), 0.0);
+                currentMap.Add(Genome.RandomGenome(sampler, STARTING_TOTAL), INITIAL_FITNESS);
             }
             print(currentMap.Count);
+            prefabAgent = ZombiePrefab.GetComponent<ZombieAgent>();
         }
 
         private void NextWave()
@@ -68,10 +73,9 @@ namespace TowerDefense.Level
             foreach (var pair in currentMap)
             {
                 if (pair.Key == null) continue;
-                nextWave.Push(pair.Key);
+                nextWave.Push(pair.Key.mutate(sampler, GROWTH_RATE));
             }
             //Possibly scramble list here?
-            print(nextWave.Count);
 
             //Reset values
             remaining_alive = POPULATION_SIZE;
@@ -82,7 +86,6 @@ namespace TowerDefense.Level
             //TODO
             toSpawn = nextWave;
 
-            prefabAgent = ZombiePrefab.GetComponent<ZombieAgent>();
             //Spawn next wave
             InvokeRepeating("Spawn", SPAWN_DELAY, SPAWN_DELAY);
         }
@@ -103,7 +106,7 @@ namespace TowerDefense.Level
             {
                 ZombieDied(agentInstance);
             };
-        } 
+        }
 
         //Callback function on zombunny death
         public void ZombieDied(ZombieAgent agent)

@@ -69,6 +69,7 @@ namespace TowerDefense.Agents
                 configuration.SetMaxHealth(health);
                 configuration.SetHealth(health);
                 lastVelocity.magnitude = genome.MovementSpeed;
+                genome = value;
             }
         }
         private int time_alive = 0;
@@ -85,7 +86,7 @@ namespace TowerDefense.Agents
         /// </summary>
         public void Start() {
             inVision = new HashSet<Targetable>();
-            genome = Genome.Zero();
+            if (genome == null) genome = Genome.Zero();
             if (lastVelocity == null)
             {
                 this.lastVelocity = new PolarVector(0, 1f);
