@@ -5,6 +5,8 @@
 \usepackage{graphicx}
 \graphicspath{ {./pictures/} }
 
+\def\imfig#1#2{\begin{figure} \centering \includegraphics[width=\columnwidth]{#1} \caption{#2} \end{figure}}
+
 
 % *****************
 %  Requirements:
@@ -152,9 +154,7 @@ At this time, we are currently waiting on actual results from our project, but w
 
 In the future, we would experiment with elements such as variable damage output from towers and other defenses (so as to avoid the aforementioned numeric minima and maxima), as well as coming up with ways to encourage attacking the player's base more as time goes on.
 
-Ultimately, we think that although evolution was the appropriate mechanism to to solve the issue at hand, game development was not the appropriate environment for this topic, given the time investment.
-
-\includegraphics[width=\columnwidth]{InGame2}
+\imfig{InGame2}{An in-game image}
 
 \section{Conclusion}
 \begin{itemize}
