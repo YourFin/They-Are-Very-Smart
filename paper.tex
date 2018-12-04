@@ -71,7 +71,7 @@ Grinnell College, Grinnell, IA 50112 \\
 \maketitle
 
 \begin{abstract}
- \tavs~is a destructible tower defense game that explores the viability of short term evolution of neural nets for pathfinding in an adapting adversarial environment. 
+ \tavs~is a destructible tower defense game that explores the viability of short term evolution of neural nets for pathfinding in an adapting adversarial environment.
 \end{abstract}
 
 \section{Introduction}
@@ -94,7 +94,7 @@ Insert picture of \textit{They Are Billions} gameplay here.
 \section{Background}
 In \tavs, we utilize a basic genetic algorithm to train a recurrent neural network generated using the Neuroevolution of Augmenting Topologies (NEAT) method, ~cite http://sharpneat.sourceforge.net/~ with https://www.heatonresearch.com/encog/, which is a generalized deep-learning library that includes implementations of NEAT and HyperNEAT.
 
-NEAT is particularly applicable to our issue because it allows the evolution of different topologies and weights in neural networks at the same time, unlike standard back-propagation learning, and is also well-suited for encoding into a genome for evolution. NEAT works essentially by encoding a function that then generates a neural net (citation needed), starting out with low complexity of topology, which can then evolve towards more complex topologies. 
+NEAT is particularly applicable to our issue because it allows the evolution of different topologies and weights in neural networks at the same time, unlike standard back-propagation learning, and is also well-suited for encoding into a genome for evolution. NEAT works essentially by encoding a function that then generates a neural net (citation needed), starting out with low complexity of topology, which can then evolve towards more complex topologies.
 
 Insert helpful diagram here
 
@@ -102,6 +102,16 @@ Insert helpful diagram here
 
 
 \section{Tutorial}
+
+\subsection{Running the game}
+Our game can be found at
+\href{https://github.com/YourFin/They-Are-Very-Smart}{github.com/yourfin/They-Are-Very-Smart},
+and downloaded with a standard \texttt{git clone} command. The relevant unity
+scene is then located at
+\texttt{They-Are-Very-Smart/TD/TowerDefence/Assets/Scenes/Levels/Level0/Level0.unity}
+Double clicking on this file on any computer with unity installed will open up
+the unity editor with the context for this paper.
+
 Overview
 \begin{itemize}
     \item Unity
@@ -155,7 +165,7 @@ Ultimately, we think that although evolution was the appropriate mechanism to to
         \item Unity Tower Defense Tutorial
         \item Unity Action Game Shooter Tutorial
         \item Redzen repository for normal random numbers
-        \item 
+        \item
     \end{itemize}
 \end{itemize}
 
