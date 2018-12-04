@@ -1,11 +1,14 @@
 \documentclass[letterpaper]{article}
 
+\usepackage [english]{babel}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
 \usepackage{natbib,alifeconf}  %% The order is important
 \usepackage{url}
 \usepackage{graphicx}
 \graphicspath{ {./pictures/} }
 
-\def\imfig#1#2{\begin{figure} \centering \includegraphics[width=\columnwidth]{#1} \caption{#2} \end{figure}}
+\def\imfig#1#2{\begin{figure}[h] \centering \includegraphics[width=\columnwidth]{#1} \caption{#2} \end{figure}}
 
 
 % *****************
@@ -76,11 +79,37 @@ Grinnell College, Grinnell, IA 50112 \\
 \maketitle
 
 \begin{abstract}
- \tavs~is a destructible tower defense game that explores the viability of short term evolution of neural nets for pathfinding in an adapting adversarial environment.
+\tavs~is a destructible tower defense game that explores the viability of short term evolution of neural nets for pathfinding in an adapting adversarial environment.
 \end{abstract}
 
 \section{Introduction}
-\tavs~is a real-time tower defense game with evolving enemies; which is to say that the player places down towers and other defenses in real time to fend off waves of enemies attempting to destroy the player's "home base." In typical tower defense games, after killing one group of enemies, another comes which is usually stronger than the previous, due to a pre-ordained set of constraints. \textit{They are Very Smart} differs from typical tower defense games in that enemy progression is not determined by divine force (i.e., the game developer), but rather evolves as a result of a genetic algorithm which controls the enemies' damage, movement speed, health, and navigation.
+\tavs~is a real-time tower defense game with evolving enemies; which is to say that the player places down towers and other defenses in real time to fend off waves of enemies attempting to destroy the player's "home base." In typical tower defense games, after killing one group of enemies, another comes which is usually stronger than the previous, due to a pre-ordained set of constraints. \tavs~differs from typical tower defense games in that enemy progression is not determined by the game developer, but rather evolves as a result of a genetic algorithm which controls the enemies' damage, movement speed, health, and navigation.
+
+\begin{figure}[h]
+	\includegraphics[width=\columnwidth]{InGameLabeled}
+	\caption{A screenshot from the game, with various elements labeled}
+\end{figure}
+
+In \tavs, player interaction consists of constructing defenses around a central home base. The home base exists in a fixed location in the center of the map, has a set maximum health, and can be damaged by attacks from enemies. Waves of enemies will spawn indefinitely and attempt to destroy the home base. When the health of the home base reaches zero, the game ends.
+
+Players begin the game with an initial sum of money, which can be used to purchase defenses from the tower construction UI (see Figure 1). Defenses are damageable structures which the player may place on any unoccupied square within the defense placement grid.
+\imfig{ZoomedOut}{The initial state of the game, showing the home base in the middle of the defense placement grid}
+
+Defenses provide various benefits to the player, such as physically blocking the path of enemies or actively damaging enemies with projectile-based attacks. Some examples of defenses include:
+\begin{itemize}
+	\item Walls (vertical/horizontal) - inexpensive defenses which block the path of enemies
+	\item Machine gun turrets - towers which fire damaging projectiles at nearby enemies
+	\item Energy pylons - fragile towers which deal no damage, but instead passively generate income for the player
+\end{itemize}  
+
+Defenses cost money, which may be gained by killing attacking enemies. As the game progresses, the player may fortify their base by purchasing more expensive defenses and designing complex arrangements of walls and towers in order to thwart enemies.
+
+In \tavs, the player must defend their home base against the aforementioned onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies are driven by a single goal: destruction of the player's home base. Zombunnies spawn in groups of ten (separated by a slight delay) at the beginning of the game. Subsequent waves spawn after all members from the previous wave have died. Zombunnies use a genetic algorithm in conjunction with a recurrent neural network to evolve a pathfinding algorithm between generations (waves), with the long-term incentive of dealing damage to the player's base (explain fitness criteria more concisely here). Zombunnies can be killed by either taking damage from a player's defenses or through "starvation." A Zombunny will starve to death if it does not take or deal damage for a given length of time. Through this mechanism, those Zombunnies which survive the longest will be those that interact the most with the player's defenses, and will be more likely to pass on their Zombunnies have stats , when they are born, Zombunnies are assigned can "see" nearby entities, including other Zombunnies and 
+
+\imfig{ZombunnyColliders}{A Zombunny, with attacker and damage colliders highlighted} 
+
+Zombunnies - Health decay (starvation) - Basic vision->vector overview
+
 
 \begin{itemize}
     \item Description of tower-defense UI
@@ -92,14 +121,14 @@ Grinnell College, Grinnell, IA 50112 \\
 \end{itemize}
 
 
-\tavs was initially inspired by Numantian Games' \textit{They Are Billions}, a game in which a player must build defenses in order to fend off a zombie apocalypse. The game features massive numbers of zombies. This project emerged from an interest in what \textit{They Are Billions} would be like if the zombies could actually think for themselves. The result is significantly pared down in comparison, as the focus has been on zombie evolution as opposed to player interactivity and enjoyability. However, similiarities to \textit{They Are Billions} can be seen in the resource management system, the player's defense of a citadel, and need to fend off the faceless hordes. \textit{They Are Billions} puts additional emphasis on world generation, player exploration, and narrative elements.
+\tavs~was initially inspired by Numantian Games' \textit{They Are Billions}, a game in which a player must build defenses in order to fend off a zombie apocalypse. The game features massive numbers of zombies. This project emerged from an interest in what \textit{They Are Billions} would be like if the zombies could actually think for themselves. The result is significantly pared down in comparison, as the focus has been on zombie evolution as opposed to player interactivity and enjoyability. However, similarities to \textit{They Are Billions} can be seen in the resource management system, the player's defense of a citadel, and need to fend off the faceless hordes. In contrast, \textit{They Are Billions} puts additional emphasis on world generation, player exploration, and narrative elements.
 
 Insert picture of \textit{They Are Billions} gameplay here.
 
 \section{Background}
 In \tavs, we utilize a basic genetic algorithm to train a recurrent neural network generated using the Neuroevolution of Augmenting Topologies (NEAT) method, ~cite http://sharpneat.sourceforge.net/~ with https://www.heatonresearch.com/encog/, which is a generalized deep-learning library that includes implementations of NEAT and HyperNEAT.
 
-NEAT is particularly applicable to our issue because it allows the evolution of different topologies and weights in neural networks at the same time, unlike standard back-propagation learning, and is also well-suited for encoding into a genome for evolution. NEAT works essentially by encoding a function that then generates a neural net (citation needed), starting out with low complexity of topology, which can then evolve towards more complex topologies.
+NEAT is particularly applicable to our issue because it allows the evolution of different topologies and weights in neural networks at the same time, unlike standard back-propagation learning, and is also well-suited for encoding into a genome for evolution. NEAT works by encoding a function that then generates a neural net (citation needed), starting out with low complexity of topology, which can then evolve towards more complex topologies.
 
 Insert helpful diagram here
 
@@ -153,8 +182,10 @@ Over the course of this project, we learned more about game design than we did e
 At this time, we are currently waiting on actual results from our project, but we hope that given a large enough population of zombies, we might see populations of zombies evolving to counteract players' strategies, although we may also see players coming up with ways to counteract the zombies by exploiting elements of the fitness function and construction system in ways unforeseen, possibly by playing in such a way as to allow the zombies to optimize for something other than killing the player's home base. Another possibility we might expect to see is the development of swarm or anti-swarm behavior based on the effectiveness of player defenses, as well as zombies possibly hitting minima or maxima depending on hard-coded numbers in the game environment.
 
 In the future, we would experiment with elements such as variable damage output from towers and other defenses (so as to avoid the aforementioned numeric minima and maxima), as well as coming up with ways to encourage attacking the player's base more as time goes on.
-
-\imfig{InGame2}{An in-game image}
+\begin{figure}
+	\includegraphics[width=\columnwidth]{InGame2}
+	\caption{An in-game image}
+\end{figure}
 
 \section{Conclusion}
 \begin{itemize}
@@ -162,7 +193,7 @@ In the future, we would experiment with elements such as variable damage output 
     \item Future work and next steps
 \end{itemize}
 
-\section{Acknowledgements}
+\section{Acknowledgments}
 \begin{itemize}
     \item Use of multiple tutorials/repositories
     \begin{itemize}
