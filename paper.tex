@@ -146,7 +146,10 @@ Overview
 
 
 \section{Preliminary Results and Discussion}
-Over the course of this project, we learned more about game design than we did evolutionary algorithms and artificial life. The majority of our time working on this project was spent dealing with learning the basics of Unity and C\#, which presented a very significant challenge that we vastly underestimated.
+Over the course of this project, we learned more about game design than we did
+evolutionary algorithms and artificial life. The majority of our time working on
+this project was spent dealing with learning the basics of Unity and C\#, which
+presented a very significant challenge that we vastly underestimated.
 
 At this time, we are currently waiting on actual results from our project, but
 we hope that given a large enough population of zombies, we might see
@@ -160,6 +163,38 @@ result in progressively larger values relative to the mutation rate, making it
 hard for long-evolved values to be changed in the face of changing player
 strategies.
 
+One approach to solving this problem could be moving towards more complicated
+models of selection and reproduction than our current keep \(n\) percent,
+asexually reproduce the best genomes and then do a straight pass of mutation.
+Moving to a system where reproductive resources are distributed according to the
+Z-score (standard deviations from the mean) or similar of fitness that give more
+reproductive power to individual that more drastically improve on the status quo
+could allow for a system that reacts more strongly to change. Another option
+could be coding part of the mutation rate in genomes to allow evolution to
+determine it's own speed. The two previous approaches could even be combined for
+as dynamic an evolution environment as possible.
+
+Sexual (genderless) reproduction could also be introduced as a way of trying to
+increase diversity. Plain sexual reproduction without any further restrictions
+could allow good traits that evolve in parallel to be combined into a single
+individual with the benefits of both, which has fairly obvious advantages.
+This simple approach to sexual reproduction could, however, force a single
+species to dominate quickly depending on how well neural net parameters combine,
+as it could easily be the case that two disparately evolving neural nets combine
+into a total dud, despite having fit parents. One way around that would be to
+condition reproduction on similarity, such genomes are more likely to reproduce
+with those that are structurally similar. Another approach would be to allow
+genomes to determine mating preference based on other genomes' content and
+fitness, and then run them through a tournament to determine mates. This would
+have the additional benefit of allowing additional emergent behavior that has
+not been conceived of in this speculation.
+
+Conceptually, evolving neural nets has the massive benefit of not worrying about
+how to differentiate and nicely back-propagate
+
+individuals that jump out ahead of the population could
+
+Discussion: talk about the lack of direction vectors being fed into the neural nets.
 
 may also see players coming up with ways to counteract the zombies by exploiting
 elements of the fitness function and construction system in ways unforeseen,
