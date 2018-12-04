@@ -100,13 +100,13 @@ Defenses provide various benefits to the player, such as physically blocking the
 	\item Walls (vertical/horizontal) - inexpensive defenses which block the path of enemies
 	\item Machine gun turrets - towers which fire damaging projectiles at nearby enemies
 	\item Energy pylons - fragile towers which deal no damage, but instead passively generate income for the player
-\end{itemize}  
+\end{itemize}
 
 Defenses cost money, which may be gained by killing attacking enemies. As the game progresses, the player may fortify their base by purchasing more expensive defenses and designing complex arrangements of walls and towers in order to thwart enemies.
 
-In \tavs, the player must defend their home base against the aforementioned onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies are driven by a single goal: destruction of the player's home base. Zombunnies spawn in groups of ten (separated by a slight delay) at the beginning of the game. Subsequent waves spawn after all members from the previous wave have died. Zombunnies use a genetic algorithm in conjunction with a recurrent neural network to evolve a pathfinding algorithm between generations (waves), with the long-term incentive of dealing damage to the player's base (explain fitness criteria more concisely here). Zombunnies can be killed by either taking damage from a player's defenses or through "starvation." A Zombunny will starve to death if it does not take or deal damage for a given length of time. Through this mechanism, those Zombunnies which survive the longest will be those that interact the most with the player's defenses, and will be more likely to pass on their Zombunnies have stats , when they are born, Zombunnies are assigned can "see" nearby entities, including other Zombunnies and 
+In \tavs, the player must defend their home base against the aforementioned onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies are driven by a single goal: destruction of the player's home base. Zombunnies spawn in groups of ten (separated by a slight delay) at the beginning of the game. Subsequent waves spawn after all members from the previous wave have died. Zombunnies use a genetic algorithm in conjunction with a recurrent neural network to evolve a pathfinding algorithm between generations (waves), with the long-term incentive of dealing damage to the player's base (explain fitness criteria more concisely here). Zombunnies can be killed by either taking damage from a player's defenses or through "starvation." A Zombunny will starve to death if it does not take or deal damage for a given length of time. Through this mechanism, those Zombunnies which survive the longest will be those that interact the most with the player's defenses, and will be more likely to pass on their Zombunnies have stats , when they are born, Zombunnies are assigned can "see" nearby entities, including other Zombunnies and
 
-\imfig{ZombunnyColliders}{A Zombunny, with attacker and damage colliders highlighted} 
+\imfig{ZombunnyColliders}{A Zombunny, with attacker and damage colliders highlighted}
 
 Zombunnies - Health decay (starvation) - Basic vision->vector overview
 
@@ -177,15 +177,68 @@ Overview
 
 
 \section{Preliminary Results and Discussion}
-Over the course of this project, we learned more about game design than we did evolutionary algorithms and artificial life. The majority of our time working on this project was spent dealing with learning the basics of Unity and C\#, which presented a very significant challenge that we vastly underestimated.
+Over the course of this project, we learned more about game design than we did
+evolutionary algorithms and artificial life. The majority of our time working on
+this project was spent dealing with learning the basics of Unity and C\#, which
+presented a very significant challenge that we vastly underestimated.
 
-At this time, we are currently waiting on actual results from our project, but we hope that given a large enough population of zombies, we might see populations of zombies evolving to counteract players' strategies, although we may also see players coming up with ways to counteract the zombies by exploiting elements of the fitness function and construction system in ways unforeseen, possibly by playing in such a way as to allow the zombies to optimize for something other than killing the player's home base. Another possibility we might expect to see is the development of swarm or anti-swarm behavior based on the effectiveness of player defenses, as well as zombies possibly hitting minima or maxima depending on hard-coded numbers in the game environment.
+At this time, we are currently waiting on actual results from our project, but
+we hope that given a large enough population of zombies, we might see
+populations of zombies evolving to counteract players' strategies. Evolution
+will likely have little trouble tackling a trivial or consistent player
+strategy, like consistently rebuilding the same towers in the same place and
+relying heavily on a single tower type, but evolution may have trouble keeping
+up with a player that consistently changes strategy over the course of the game.
+Our system of softmaxing the genome speed, health, and damage could also
+result in progressively larger values relative to the mutation rate, making it
+hard for long-evolved values to be changed in the face of changing player
+strategies.
 
-In the future, we would experiment with elements such as variable damage output from towers and other defenses (so as to avoid the aforementioned numeric minima and maxima), as well as coming up with ways to encourage attacking the player's base more as time goes on.
-\begin{figure}
-	\includegraphics[width=\columnwidth]{InGame2}
-	\caption{An in-game image}
-\end{figure}
+One approach to solving this problem could be moving towards more complicated
+models of selection and reproduction than our current keep \(n\) percent,
+asexually reproduce the best genomes and then do a straight pass of mutation.
+Moving to a system where reproductive resources are distributed according to the
+Z-score (standard deviations from the mean) or similar of fitness that give more
+reproductive power to individual that more drastically improve on the status quo
+could allow for a system that reacts more strongly to change. Another option
+could be coding part of the mutation rate in genomes to allow evolution to
+determine it's own speed. The two previous approaches could even be combined for
+as dynamic an evolution environment as possible.
+
+Sexual (genderless) reproduction could also be introduced as a way of trying to
+increase diversity. Plain sexual reproduction without any further restrictions
+could allow good traits that evolve in parallel to be combined into a single
+individual with the benefits of both, which has fairly obvious advantages.
+This simple approach to sexual reproduction could, however, force a single
+species to dominate quickly depending on how well neural net parameters combine,
+as it could easily be the case that two disparately evolving neural nets combine
+into a total dud, despite having fit parents. One way around that would be to
+condition reproduction on similarity, such genomes are more likely to reproduce
+with those that are structurally similar. Another approach would be to allow
+genomes to determine mating preference based on other genomes' content and
+fitness, and then run them through a tournament to determine mates. This would
+have the additional benefit of allowing additional emergent behavior that has
+not been conceived of in this speculation.
+
+Conceptually, evolving neural nets has the massive benefit of not worrying about
+how to differentiate and nicely back-propagate
+
+individuals that jump out ahead of the population could
+
+Discussion: talk about the lack of direction vectors being fed into the neural nets.
+
+may also see players coming up with ways to counteract the zombies by exploiting
+elements of the fitness function and construction system in ways unforeseen,
+possibly by playing in such a way as to allow the zombies to optimize for
+something other than killing the player's home base. Another possibility we
+might expect to see is the development of swarm or anti-swarm behavior based on
+the effectiveness of player defenses, as well as zombies possibly hitting minima
+or maxima depending on hard-coded numbers in the game environment.
+
+In the future, we could experiment with elements such as variable damage output
+from towers and other defenses (so as to avoid the aforementioned numeric minima
+and maxima), as well as coming up with ways to encourage attacking the player's
+base more as time goes on; this could include ways
 
 \section{Conclusion}
 \begin{itemize}
