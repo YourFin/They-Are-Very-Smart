@@ -148,13 +148,31 @@ Overview
 \section{Preliminary Results and Discussion}
 Over the course of this project, we learned more about game design than we did evolutionary algorithms and artificial life. The majority of our time working on this project was spent dealing with learning the basics of Unity and C\#, which presented a very significant challenge that we vastly underestimated.
 
-At this time, we are currently waiting on actual results from our project, but we hope that given a large enough population of zombies, we might see populations of zombies evolving to counteract players' strategies, although we may also see players coming up with ways to counteract the zombies by exploiting elements of the fitness function and construction system in ways unforeseen, possibly by playing in such a way as to allow the zombies to optimize for something other than killing the player's home base. Another possibility we might expect to see is the development of swarm or anti-swarm behavior based on the effectiveness of player defenses, as well as zombies possibly hitting minima or maxima depending on hard-coded numbers in the game environment.
+At this time, we are currently waiting on actual results from our project, but
+we hope that given a large enough population of zombies, we might see
+populations of zombies evolving to counteract players' strategies. Evolution
+will likely have little trouble tackling a trivial or consistent player
+strategy, like consistently rebuilding the same towers in the same place and
+relying heavily on a single tower type, but evolution may have trouble keeping
+up with a player that consistently changes strategy over the course of the game.
+Our system of softmaxing the genome speed, health, and damage could also
+result in progressively larger values relative to the mutation rate, making it
+hard for long-evolved values to be changed in the face of changing player
+strategies.
 
-In the future, we would experiment with elements such as variable damage output from towers and other defenses (so as to avoid the aforementioned numeric minima and maxima), as well as coming up with ways to encourage attacking the player's base more as time goes on.
 
-Ultimately, we think that although evolution was the appropriate mechanism to to solve the issue at hand, game development was not the appropriate environment for this topic, given the time investment.
+may also see players coming up with ways to counteract the zombies by exploiting
+elements of the fitness function and construction system in ways unforeseen,
+possibly by playing in such a way as to allow the zombies to optimize for
+something other than killing the player's home base. Another possibility we
+might expect to see is the development of swarm or anti-swarm behavior based on
+the effectiveness of player defenses, as well as zombies possibly hitting minima
+or maxima depending on hard-coded numbers in the game environment.
 
-\includegraphics[width=\columnwidth]{InGame2}
+In the future, we could experiment with elements such as variable damage output
+from towers and other defenses (so as to avoid the aforementioned numeric minima
+and maxima), as well as coming up with ways to encourage attacking the player's
+base more as time goes on; this could include ways
 
 \section{Conclusion}
 \begin{itemize}
