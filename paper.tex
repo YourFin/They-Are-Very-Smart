@@ -104,22 +104,20 @@ Defenses provide various benefits to the player, such as physically blocking the
 
 Defenses cost money, which may be gained by killing attacking enemies. As the game progresses, the player may fortify their base by purchasing more expensive defenses and designing complex arrangements of walls and towers in order to thwart enemies.
 
-In \tavs, the player must defend their home base against the aforementioned onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies are driven by a single goal: destruction of the player's home base. Zombunnies spawn in groups of ten (separated by a slight delay) at the beginning of the game. Subsequent waves spawn after all members from the previous wave have died. Zombunnies use a genetic algorithm in conjunction with a recurrent neural network to evolve a pathfinding algorithm between generations (waves), with the long-term incentive of dealing damage to the player's base (explain fitness criteria more concisely here). Zombunnies can be killed by either taking damage from a player's defenses or through "starvation." A Zombunny will starve to death if it does not take or deal damage for a given length of time. Through this mechanism, those Zombunnies which survive the longest will be those that interact the most with the player's defenses, and will be more likely to pass on their Zombunnies have stats , when they are born, Zombunnies are assigned can "see" nearby entities, including other Zombunnies and
+\pagebreak
+In \tavs, the player must defend their home base against the aforementioned onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies are driven by a single goal: destruction of the player's home base. Zombunnies spawn in groups of ten (separated by a slight delay) at the beginning of the game. Subsequent waves spawn after all members from the previous wave have died. Zombunnies use a genetic algorithm in conjunction with a recurrent neural network to evolve a pathfinding algorithm between generations (waves), with the long-term incentive of dealing damage to the player's base (explain fitness criteria more concisely here). Zombunnies can be killed by either taking damage from a player's defenses or through "starvation." A Zombunny will starve to death if it does not take or deal damage for a given length of time. Through this starvation mechanism, the Zombunnies which survive the longest are ultimately those which interact the most with the player's defenses, and are subsequently more likely to pass on attributes of their genome to the next generation. Zombunnies have three characteristic attributes: health, damage, and movement speed. All three of these stats are assigned upon spawning as dictated by their genome. Pathfinding is controlled by a recurrent neural net, whose weights are determined through a genetic algorithm between waves, which optimizes for Zombunnies' ability to achieve their overarching goal of player base destruction. Zombunnies can "see" nearby entities within a certain radius, including other Zombunnies, player defenses, and the player's home base (when in range). Based on the combination of visible inputs, Zombunnies will output a chosen direction which they will then walk in. This algorithm updates on a tick-by-tick basis. Zombunnies will damage structures they collide with. Because evolution of the pathfinding neural net only happens between generations, near the beginning of the game, Zombunnies will start off with relatively stupid pathfinding which will typically cause the first few populations to starve to death without dealing any significant damage. This provides the player with an initial grace period during which they may build their initial defenses. As time goes on, Zombunnies will evolve towards an optimal stat distribution of health, damage, and speed, as well as in their ability to pathfind in such a way as to thwart the player's defenses and end the game.
 
 \imfig{ZombunnyColliders}{A Zombunny, with attacker and damage colliders highlighted}
 
-Zombunnies - Health decay (starvation) - Basic vision->vector overview
-
-
-\begin{itemize}
-    \item Description of tower-defense UI
-    \item Placement of walls vs. towers
-    \item "Spawn points" for zombies
-    \item Central defensible location
-    \item Economy
-    \item Game end/lack thereof
-\end{itemize}
-
+%overview
+%\begin{itemize}
+%    \item Description of tower-defense UI
+%    \item Placement of walls vs. towers
+%    \item "Spawn points" for zombies
+%    \item Central defensible location
+%    \item Economy
+%    \item Game end/lack thereof
+%\end{itemize}
 
 \tavs~was initially inspired by Numantian Games' \textit{They Are Billions}, a game in which a player must build defenses in order to fend off a zombie apocalypse. The game features massive numbers of zombies. This project emerged from an interest in what \textit{They Are Billions} would be like if the zombies could actually think for themselves. The result is significantly pared down in comparison, as the focus has been on zombie evolution as opposed to player interactivity and enjoyability. However, similarities to \textit{They Are Billions} can be seen in the resource management system, the player's defense of a citadel, and need to fend off the faceless hordes. In contrast, \textit{They Are Billions} puts additional emphasis on world generation, player exploration, and narrative elements.
 
