@@ -40,3 +40,5 @@ paper.out
 paper.pdf
 paper.synctex.gz
 texput.log
+paper.bbl
+paper.blg
