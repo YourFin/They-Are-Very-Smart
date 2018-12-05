@@ -9,6 +9,8 @@
 \graphicspath{ {./pictures/} }
 
 \def\imfig#1#2{\begin{figure}[h] \centering \includegraphics[width=\columnwidth]{#1} \caption{#2} \end{figure}}
+\def\imfigB#1#2{\begin{figure} \centering \includegraphics[width=\columnwidth]{#1} \caption{#2} \end{figure}}
+\def\imfigH#1#2{\begin{figure}[H] \centering \includegraphics[width=\columnwidth]{#1} \caption{#2} \end{figure}}
 
 
 % *****************
@@ -105,6 +107,8 @@ Defenses provide various benefits to the player, such as physically blocking the
 Defenses cost money, which may be gained by killing attacking enemies. As the game progresses, the player may fortify their base by purchasing more expensive defenses and designing complex arrangements of walls and towers in order to thwart enemies.
 
 \pagebreak
+
+\imfig{BaseExample}{An example set of player defenses around the home base}
 In \tavs, the player must defend their home base against the aforementioned onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies are driven by a single goal: destruction of the player's home base. Zombunnies spawn in groups of ten (separated by a slight delay) at the beginning of the game. Subsequent waves spawn after all members from the previous wave have died. Zombunnies use a genetic algorithm in conjunction with a recurrent neural network to evolve a pathfinding algorithm between generations (waves), with the long-term incentive of dealing damage to the player's base (explain fitness criteria more concisely here). Zombunnies can be killed by either taking damage from a player's defenses or through "starvation." A Zombunny will starve to death if it does not take or deal damage for a given length of time. Through this starvation mechanism, the Zombunnies which survive the longest are ultimately those which interact the most with the player's defenses, and are subsequently more likely to pass on attributes of their genome to the next generation. Zombunnies have three characteristic attributes: health, damage, and movement speed. All three of these stats are assigned upon spawning as dictated by their genome. Pathfinding is controlled by a recurrent neural net, whose weights are determined through a genetic algorithm between waves, which optimizes for Zombunnies' ability to achieve their overarching goal of player base destruction. Zombunnies can "see" nearby entities within a certain radius, including other Zombunnies, player defenses, and the player's home base (when in range). Based on the combination of visible inputs, Zombunnies will output a chosen direction which they will then walk in. This algorithm updates on a tick-by-tick basis. Zombunnies will damage structures they collide with. Because evolution of the pathfinding neural net only happens between generations, near the beginning of the game, Zombunnies will start off with relatively stupid pathfinding which will typically cause the first few populations to starve to death without dealing any significant damage. This provides the player with an initial grace period during which they may build their initial defenses. As time goes on, Zombunnies will evolve towards an optimal stat distribution of health, damage, and speed, as well as in their ability to pathfind in such a way as to thwart the player's defenses and end the game.
 
 \imfig{ZombunnyColliders}{A Zombunny, with attacker and damage colliders highlighted}
@@ -124,12 +128,9 @@ In \tavs, the player must defend their home base against the aforementioned onsl
 Insert picture of \textit{They Are Billions} gameplay here.
 
 \section{Background}
-In \tavs, we utilize a basic genetic algorithm to train a recurrent neural network generated using the Neuroevolution of Augmenting Topologies (NEAT) method, ~cite http://sharpneat.sourceforge.net/~ with https://www.heatonresearch.com/encog/, which is a generalized deep-learning library that includes implementations of NEAT and HyperNEAT.
+In \tavs, we utilize a basic genetic algorithm to train a recurrent neural network generated using the Neuroevolution of Augmenting Topologies (NEAT) method and \href{https://www.heatonresearch.com/encog/}{Encog} framework, which can be found \href{https://sharpneat.sourceforge.net/}{here}, which is a generalized deep-learning library that includes implementations of NEAT and HyperNEAT.
 
-NEAT is particularly applicable to our issue because it allows the evolution of different topologies and weights in neural networks at the same time, unlike standard back-propagation learning, and is also well-suited for encoding into a genome for evolution. NEAT works by encoding a function that then generates a neural net (citation needed), starting out with low complexity of topology, which can then evolve towards more complex topologies.
-
-Insert helpful diagram here
-
+NEAT is particularly applicable to our issue because it allows the evolution of different topologies and weights in neural networks at the same time, unlike standard back-propagation learning, and is also well-suited for encoding into a genome for evolution. NEAT works by encoding a function that then generates a neural net, starting out with low complexity of topology, which can then evolve towards more complex topologies.
 
 
 
@@ -138,40 +139,87 @@ Insert helpful diagram here
 \subsection{Running the game}
 Our game can be found at
 \href{https://github.com/YourFin/They-Are-Very-Smart}{github.com/yourfin/They-Are-Very-Smart},
-and downloaded with a standard \texttt{git clone} command. The relevant unity
+and downloaded with a standard \texttt{git clone} command. The relevant Unity
 scene is then located at
-\url{They-Are-Very-Smart/TD/TowerDefence/Assets/Scenes/Levels/Level0/Level0.unity}
-Double clicking on this file on any computer with unity installed will open up
-the unity editor with the context for this paper.
+\path{They-Are-Very-Smart/TD/TowerDefence/Assets/Scenes/Levels/Level0/Level0.unity}
+Double clicking on this file on any computer with Unity installed will open up
+the Unity editor with the context for this paper.
 
-Overview
-\begin{itemize}
-    \item Unity
-    \item Tower Defense tutorial
-    \item Action Game Framework
-    \item Creating custom towers
-    \item Custom scripts
-        \begin{itemize}
-            \item Genome
-            \item ZombieAgent
-            \item GenomeManager
-            \item ZombieAttacker
-        \end{itemize}
-    \item Problems importing packages
-    \item Relevant parts of Encog framework
-        \begin{itemize}
-            \item Manually pulling out Encog training methods for neural nets
-            \item Stealing Softmax function
-        \end{itemize}
-    \item Point array stats system
-    \item Details of genetic algorithm
-        \begin{itemize}
-            \item Mutation
-            \item Keeping track of fitness
-            \item Population management
-            \item Starvation function
-        \end{itemize}
-\end{itemize}
+\subsection{Code overview}
+\subsubsection{PolarVector}
+The PolarVector class encapsulates the internal representation that we use for storing and passing vectors to the neural net, as well as keeping track of the previous direction a Zombunny was headed during the previous tick. The PolarVector class essentially wraps a float, direction (in degrees) and a float, magnitude, which provides sufficient information to create a new vector in two-dimensional space. The PolarVector class provides some convenient helper methods for converting between Cartesian and Polar coordinate systems, as the Unity engine primarily uses Cartesian coordinates.
+
+\imfigB{PolarVector1}{The basics of PolarVector}
+
+The implementation details of PolarVector's conversion functions are fairly trivially derived from math, but it should be noted that all Cartesian components are encoded as Vector3 components as the game takes place on the X-Z plane (see Figure 6). 
+
+\imfigB{PolarVector2}{Conversion functions for PolarVector}
+
+\subsubsection{Genome}
+The Genome class encapsulates the data that is stored on a genome-by-genome basis, and provides most of the procedures that deal with their mutation, as well as providing conversions from their internal state to the game-useful health, speed, and damage values, as well as providing an interface to conveniently call the resulting pathfinding neural net.
+
+\imfigB{Genome1}{Constants and Id for the Genome class}
+
+In Figure 7, we can see the constants that are used to scale a Zombunny's health, movement speed, and damage, which need to be set manually. The Id field is used as a unique identifier if genomes need to be looked up, and also ensures that every genome will hash differently.
+
+\imfig{Mutation}{Mutation procedure of the Genome class}
+
+The mutation function in Figure 8 essentially creates a new copy of the current genome, nudged by normally distributed random numbers.
+
+\subsubsection{GenomeManager}
+
+The GenomeManager class keeps track of game-wide genome management, i.e. selection and reproduction, as well as spawning Zombunnies and initiating new waves. The GenomeManager holds onto a collection of all genomes in a wave-by-wave list of hashmaps that map genomes to their fitness. The primary properties of the GenomeManager class can be seen in Figure 9, with various hardcoded constants that can be adjusted to influence general properties of the evolution, as well as the genomeMaps object, which contains the aforementioned collection of all genomes used in the course of evolution thus far.
+
+\imfig{GenomeManagerProperties}{Properties of the GenomeManager class}
+
+The initialization process of GenomeManager (see Figure 10) consists primarily of allocating the containing data structures for the various stages of the genome life cycle, followed by creating a first wave with randomized genomes and zero fitness. It should also be noted that we initialize our ZigguratGaussianSampler here from the Redzen library, which provides a fast way of generating normally-distributed floating-point numbers.
+
+\imfig{GenomeManagerInit}{The GenomeManager initialization process}
+
+Figure 11 shows the NextWave function, which handles the wave-to-wave portions of evolution, i.e. culling and reproduction. It should also be noted that we scramble the Zombunnies, as the Zombunnies get spawned in the order in which they are placed onto the nextWave stack. We scramble the order of the genomes between waves to make sure that evolution doesn't get held up by some side effect of consistent ordering.
+
+\imfig{GenomeManagerNextWave}{The NextWave method of GenomeManager}
+
+The Spawn method, as seen in Figure 12, is called every SPAWN\_DELAY interval POPULATION\_COUNT times. The function starts by spawning a Zombunny with no genome due to the inability to provide parameters upon GameObject instantiation. Therefore, we set the genome after the fact, popping it off of the toSpawn stack, also adding the ZombieDied function to the removed event on said Zombunny, which allows us to execute code in the context of the GenomeManager upon Zombunny death; namely, ZombunnyDied. ZombunnyDied handles finding the fitness of Zombunnies and adding them to the list of completed genomes, as well as calling NextWave again when the last Zombunny in the wave dies.
+
+\imfig{GenomeManagerSpawn}{Spawning machinery of the GenomeManager class}
+
+
+
+\subsubsection{Redzen}
+Redzen is a general-purpose utilities library for C\# that contains the fast random function that we use. However, it should be noted that the library as it may be found online at the time of writing does not compile with the older C\# compiler that Unity uses. Thus, we had to manually delete most of the library files and remove underscore digit separators from some numeric constants, as they are a C\# 7 feature. You can find our compatible library at \path{They-Are-Very-Smart/TD/TowerDefense/Assets/Scripts/Util/Redzen}
+
+\subsubsection{}
+
+
+%Overview
+%\begin{itemize}
+%    \item Unity
+%    \item Tower Defense tutorial
+%    \item Action Game Framework
+%    \item Creating custom towers
+%    \item Custom scripts
+%        \begin{itemize}
+%            \item Genome
+%            \item ZombieAgent
+%            \item GenomeManager
+%            \item ZombieAttacker
+%        \end{itemize}
+%    \item Problems importing packages
+%    \item Relevant parts of Encog framework
+%        \begin{itemize}
+%            \item Manually pulling out Encog training methods for neural nets
+%            \item Stealing Softmax function
+%        \end{itemize}
+%    \item Point array stats system
+%    \item Details of genetic algorithm
+%        \begin{itemize}
+%            \item Mutation
+%            \item Keeping track of fitness
+%            \item Population management
+%            \item Starvation function
+%        \end{itemize}
+%\end{itemize}
 
 
 \section{Preliminary Results and Discussion}
@@ -202,9 +250,9 @@ exist similar problems that have not been considered.
 Players, on the other hand, may also learn to optimize around our implementation
 of evolution. Conceivably clever player could develop two very different
 strategies ahead of time. The player would first implement the weaker strategy,
-and as soon as the zombunnies have deeply rooted themselves in the local maximum
+and as soon as the Zombunnies have deeply rooted themselves in the local maximum
 versus that strategy, the strategy could be changed to the second strategy,
-leaving the zombunnies unable to easily adapt to the new strategy.
+leaving the Zombunnies unable to easily adapt to the new strategy.
 
 Solving these problems would probably involve moving towards more complicated
 models of selection and reproduction than our current keep \(n\) percent,
@@ -240,7 +288,7 @@ environment; on a larger timescale, the selection tournament process itself
 could modeled with a recurrent neural network, and evolved over multiple plays
 of the game.
 
-Allowing the zombunnies to keep track of what they learn from game to game could
+Allowing the Zombunnies to keep track of what they learn from game to game could
 be useful as a ``hard mode'' should the base game be too easy, perhaps with the
 additional information passed to the navigation function of the round. In an actual game
 using this technology to evolve AI, this could be expanded to the entire
@@ -263,7 +311,6 @@ any function to becoming an neural net, and with any input.
         \item Unity Tower Defense Tutorial
         \item Unity Action Game Shooter Tutorial
         \item Redzen repository for normal random numbers
-        \item
     \end{itemize}
 \end{itemize}
 

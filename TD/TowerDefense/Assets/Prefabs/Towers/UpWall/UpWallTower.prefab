@@ -363,7 +363,7 @@ MonoBehaviour:
   damageableBehaviour: {fileID: 114503817642521564}
   healthBar: {fileID: 4759123048618322}
   backgroundBar: {fileID: 4230072663838252}
-  showWhenFull: 1
+  showWhenFull: 0
 --- !u!114 &114503817642521564
 MonoBehaviour:
   m_ObjectHideFlags: 1
