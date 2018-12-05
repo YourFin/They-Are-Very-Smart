@@ -140,7 +140,7 @@ Our game can be found at
 \href{https://github.com/YourFin/They-Are-Very-Smart}{github.com/yourfin/They-Are-Very-Smart},
 and downloaded with a standard \texttt{git clone} command. The relevant unity
 scene is then located at
-\texttt{They-Are-Very-Smart/TD/TowerDefence/Assets/Scenes/Levels/Level0/Level0.unity}
+\url{They-Are-Very-Smart/TD/TowerDefence/Assets/Scenes/Levels/Level0/Level0.unity}
 Double clicking on this file on any computer with unity installed will open up
 the unity editor with the context for this paper.
 
@@ -180,19 +180,33 @@ evolutionary algorithms and artificial life. The majority of our time working on
 this project was spent dealing with learning the basics of Unity and C\#, which
 presented a very significant challenge that we vastly underestimated.
 
-At this time, we are currently waiting on actual results from our project, but
-we hope that given a large enough population of zombies, we might see
+At this time, we are waiting on actual results from our project.
+We hope that given a large enough population of zombies, we might see
 populations of zombies evolving to counteract players' strategies. Evolution
 will likely have little trouble tackling a trivial or consistent player
-strategy, like consistently rebuilding the same towers in the same place and
-relying heavily on a single tower type, but evolution may have trouble keeping
-up with a player that consistently changes strategy over the course of the game.
+strategy, like rebuilding the same towers in the same place and
+relying heavily on a single tower type, but may have trouble keeping
+up with a player that constantly changes strategy over the course of the game.
 Our system of softmaxing the genome speed, health, and damage could also
 result in progressively larger values relative to the mutation rate, making it
-hard for long-evolved values to be changed in the face of changing player
-strategies.
+hard for long-evolved high speed value to be traded for damage in the face of
+changing player strategies.
 
-One approach to solving this problem could be moving towards more complicated
+Zombunnies will likely evolve around quirks in the way the
+game is organized. The primary example would be having health that is just above
+multiples of tower damage, allowing it to sustain an additional hit with
+insignificant investment in the health stat. This particular problem could be
+solved by having towers deal damage with slight randomness, but there likely
+exist similar problems that have not been considered.
+
+Players, on the other hand, may also learn to optimize around our implementation
+of evolution. Conceivably clever player could develop two very different
+strategies ahead of time. The player would first implement the weaker strategy,
+and as soon as the zombunnies have deeply rooted themselves in the local maximum
+versus that strategy, the strategy could be changed to the second strategy,
+leaving the zombunnies unable to easily adapt to the new strategy.
+
+Solving these problems would probably involve moving towards more complicated
 models of selection and reproduction than our current keep \(n\) percent,
 asexually reproduce the best genomes and then do a straight pass of mutation.
 Moving to a system where reproductive resources are distributed according to the
@@ -218,25 +232,22 @@ fitness, and then run them through a tournament to determine mates. This would
 have the additional benefit of allowing additional emergent behavior that has
 not been conceived of in this speculation.
 
-Conceptually, evolving neural nets has the massive benefit of not worrying about
-how to differentiate and nicely back-propagate
+Conceptually, evolving neural nets instead of using backpropagation
+has the massive benefit of not worrying about how to differentiate and nicely
+back-propagate the reward/fitness function to learn, which opens up the
+possibility to drop in a nerual net to replace any function in a learning
+environment; on a larger timescale, the selection tournament process itself
+could modeled with a recurrent neural network, and evolved over multiple plays
+of the game.
 
-individuals that jump out ahead of the population could
-
-Discussion: talk about the lack of direction vectors being fed into the neural nets.
-
-may also see players coming up with ways to counteract the zombies by exploiting
-elements of the fitness function and construction system in ways unforeseen,
-possibly by playing in such a way as to allow the zombies to optimize for
-something other than killing the player's home base. Another possibility we
-might expect to see is the development of swarm or anti-swarm behavior based on
-the effectiveness of player defenses, as well as zombies possibly hitting minima
-or maxima depending on hard-coded numbers in the game environment.
-
-In the future, we could experiment with elements such as variable damage output
-from towers and other defenses (so as to avoid the aforementioned numeric minima
-and maxima), as well as coming up with ways to encourage attacking the player's
-base more as time goes on; this could include ways
+Allowing the zombunnies to keep track of what they learn from game to game could
+be useful as a ``hard mode'' should the base game be too easy, perhaps with the
+additional information passed to the navigation function of the round. In an actual game
+using this technology to evolve AI, this could be expanded to the entire
+playerbase training a single pathfinding algorithm that is then redistributed to
+each client, and perhaps even takes in all previous player game history as
+additional input. The missing backpropagation requirement opens up
+any function to becoming an neural net, and with any input.
 
 \section{Conclusion}
 \begin{itemize}
