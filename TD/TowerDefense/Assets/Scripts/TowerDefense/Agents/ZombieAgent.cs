@@ -18,22 +18,18 @@ namespace TowerDefense.Agents
         private readonly static float SINK_SPEED = 2.5f;
         private readonly static float SINK_TIME = 2.0f;
 
-        private float speed;
-
         public override Vector3 velocity
         {
             // Previous velocity set by Neural Net
             get { return lastVelocity.toVector3(); }
         }
         private PolarVector lastVelocity;
-        
-        protected LevelManager m_LevelManager;
 
         public double Fitness {
-            get;
-            protected set;
+            get { return this.damageDone; }
         }
 
+        // Set of nearby objects
         private HashSet<Targetable> inVision;
 
         public readonly IAlignmentProvider alignment;
@@ -43,11 +39,14 @@ namespace TowerDefense.Agents
         public Rigidbody rigidBody;
         public Animator anim;
 
+        private int time_alive = 0;
+        private float time_dead = 0;
         private bool myIsDead = false;
         // For debug purposes only
         public float CurrentHealth = 0.1f;
         protected float damageDone = 0;
-
+        
+        // Increment total damage done over a zombie's lifetime
         public void addDamageDone(float increment)
         {
             this.damageDone += increment;
@@ -62,7 +61,6 @@ namespace TowerDefense.Agents
             }
             set
             {
-                //this.lastVelocity = PolarVector.fromVector3(transform.rotation.eulerAngles);
                 lastVelocity = new PolarVector(270);
                 genome = value;
                 var health = genome.Health;
@@ -72,8 +70,6 @@ namespace TowerDefense.Agents
                 genome = value;
             }
         }
-        private int time_alive = 0;
-        private float time_dead = 0;
 
         protected override void Awake()
         {
@@ -129,7 +125,7 @@ namespace TowerDefense.Agents
             }
             time_alive += 1;
 
-            // Find path to nearby objects
+            // Find relative position of nearby objects
             var nearbyDict = new Dictionary<Targetable, PolarVector>();
             foreach(var item in inVision)
             {

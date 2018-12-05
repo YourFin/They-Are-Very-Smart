@@ -52,7 +52,7 @@ namespace Core.Health
 		/// <param name="damageValue">Damage value.</param>
 		/// <param name="damagePoint">Damage point.</param>
 		/// <param name="alignment">Alignment value</param>
-		public virtual void TakeDamage(float damageValue, Vector3 damagePoint, IAlignmentProvider alignment)
+		public virtual float TakeDamage(float damageValue, Vector3 damagePoint, IAlignmentProvider alignment)
 		{
 			HealthChangeInfo info;
 			configuration.TakeDamage(damageValue, alignment, out info);
@@ -61,6 +61,7 @@ namespace Core.Health
 			{
 				hit(damageInfo);
 			}
+            return damageInfo.healthChangeInfo.absHealthDifference;
 		}
 
 		protected virtual void Awake()

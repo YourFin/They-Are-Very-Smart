@@ -9,14 +9,15 @@ namespace Evolution
 {
     public class Genome
     {
-        private readonly static int HEALTH_SCALE = 1;
-        private readonly static int DAMAGE_SCALE = 1;
+        private readonly static float HEALTH_SCALE = 1;
+        private readonly static float DAMAGE_SCALE = 1;
         private readonly static float MOVEMENT_SCALE = 0.4f;
         
         private static int current_id = 0;
 
         private static int id_counter = 0;
 
+        // ID # Makes sure that all genomes hash differently
         private int id;
         public int Id
         {
@@ -29,7 +30,7 @@ namespace Evolution
         // TODO: Use SoftMax for these distributions
 
         private float health;
-        public float Health { 
+        public float Health {
             get {
                 return HEALTH_SCALE * (1 + health) * divisor;
             }
@@ -43,7 +44,7 @@ namespace Evolution
         }
 
         private float movementSpeed;
-        public float MovementSpeed { 
+        public float MovementSpeed {
             get {
                 return MOVEMENT_SCALE * (1 + movementSpeed) * divisor;
             }
@@ -90,7 +91,12 @@ namespace Evolution
 
         public Genome mutate(ZigguratGaussianSampler sampler, float difficultyModifier)
         {
-            return new Genome(health + sampler.Sample(), damage + sampler.Sample(), movementSpeed + sampler.Sample(), this.totalStats + difficultyModifier);
+            return new Genome(
+                health + sampler.Sample(), 
+                damage + sampler.Sample(), 
+                movementSpeed + sampler.Sample(), 
+                this.totalStats + difficultyModifier
+                );
         }
 
         /// <summary>
@@ -102,7 +108,12 @@ namespace Evolution
         /// <param name="health">current health of the zombie</param>
         /// <param name="nearby">dictionary from nearby entities mapped to the vector to them</param>
         /// <returns>direction, The direction to move in</returns>
-        public float CalculateDirection(PolarVector previous_direction, int time_alive, float health, Dictionary<Targetable, PolarVector> nearby)
+        public float CalculateDirection(
+            PolarVector previous_direction, 
+            int time_alive, 
+            float health, 
+            Dictionary<Targetable, PolarVector> nearby
+            )
         {
             return 0f;
         }

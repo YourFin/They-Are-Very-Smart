@@ -7,14 +7,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class ZombieAttacker : MonoBehaviour {
 
-   public ZombieAgent ZombieAgent;
+   public ZombieAgent zombieAgent;
 
     private HashSet<Targetable> toAttack;
 
     // Use this for initialization
     void Start()
     {
-        ZombieAgent = GetComponentInParent<ZombieAgent>();
+        zombieAgent = GetComponentInParent<ZombieAgent>();
         toAttack = new HashSet<Targetable>();
     }
 
@@ -31,18 +31,18 @@ public class ZombieAttacker : MonoBehaviour {
 
     private void Update()
     {
-        foreach (var item in toAttack)
+        foreach (Targetable item in toAttack)
         {
             if (item != null)
             {
-                var health = item.configuration.currentHealth;
-                item.TakeDamage(
-                    ZombieAgent.Genome.Damage * Time.deltaTime,
-                    ZombieAgent.transform.position,
-                    ZombieAgent.configuration.alignmentProvider
+                float health = item.configuration.currentHealth;
+                float damage = item.TakeDamage(
+                    zombieAgent.Genome.Damage * Time.deltaTime,
+                    zombieAgent.transform.position,
+                    zombieAgent.configuration.alignmentProvider
                 );
-
-                this.ZombieAgent.addDamageDone(health - item.configuration.currentHealth);
+                zombieAgent.addDamageDone(damage);
+                this.zombieAgent.addDamageDone(health - item.configuration.currentHealth);
             }
         }
     }

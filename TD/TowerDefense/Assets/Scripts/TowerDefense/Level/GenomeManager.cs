@@ -43,7 +43,6 @@ namespace TowerDefense.Level
         // TODO
         private Stack<Genome> toSpawn;
         private ZombieAgent prefabAgent;
-
         private ZigguratGaussianSampler sampler;
 
         private void Start()
@@ -75,7 +74,7 @@ namespace TowerDefense.Level
                 if (pair.Key == null) continue;
                 nextWave.Push(pair.Key.mutate(sampler, GROWTH_RATE));
             }
-            //Possibly scramble list here?
+            // Scramble list here
 
             //Reset values
             remaining_alive = POPULATION_SIZE;
@@ -83,7 +82,6 @@ namespace TowerDefense.Level
             genomeMaps.Add(newMap);
             currentMap = genomeMaps[genomeMaps.Count - 1];
 
-            //TODO
             toSpawn = nextWave;
 
             //Spawn next wave
@@ -98,7 +96,6 @@ namespace TowerDefense.Level
             }
             int spawn_index = Random.Range(0, SpawnPoints.Count);
 
-            // TODO: Figure out pools!
             var prefabInstance = Instantiate(ZombiePrefab, SpawnPoints[spawn_index]);
             var agentInstance = prefabInstance.GetComponent<ZombieAgent>();
             agentInstance.Genome = toSpawn.Pop();
