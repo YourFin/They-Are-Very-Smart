@@ -35,7 +35,6 @@ namespace TowerDefense.Agents
         public readonly IAlignmentProvider alignment;
         public Collider visionCollider;
         public Collider damageCollider;
-        public Collider attackCollider;
         public Rigidbody rigidBody;
         public Animator anim;
 

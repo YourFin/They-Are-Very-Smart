@@ -184,12 +184,22 @@ The Spawn method, as seen in Figure 12, is called every SPAWN\_DELAY interval PO
 
 \imfig{GenomeManagerSpawn}{Spawning machinery of the GenomeManager class}
 
-
-
 \subsubsection{Redzen}
+
 Redzen is a general-purpose utilities library for C\# that contains the fast random function that we use. However, it should be noted that the library as it may be found online at the time of writing does not compile with the older C\# compiler that Unity uses. Thus, we had to manually delete most of the library files and remove underscore digit separators from some numeric constants, as they are a C\# 7 feature. You can find our compatible library at \path{They-Are-Very-Smart/TD/TowerDefense/Assets/Scripts/Util/Redzen}
 
-\subsubsection{}
+\subsubsection{ZombieAgent}
+
+ZombieAgent is a GameObject which determines Zombunny behavior and stats from a genome and keeps track of fitness for each individual Zombunny. To do so, ZombieAgent pulls all the stat-determining values from the genome and applies them upon instantiation, i.e. setting health, damage, and speed as determined by the genome, as well as handling tick-to-tick operations during a Zombunny's lifetime. These tick-to-tick operations include choosing the next movement vector based on the location of nearby GameObjects and agent's current status. 
+
+\imfig{ZombieAgent1}{ZombieAgent class parameters}
+
+In Figure 13, observe that the ZombieAgent class inherits from the Targetable class. Targetable is the parent class for every GameObject in the Action Game Framework, which can be automatically fired upon by ranged weapons, i.e. targeted. This also allows any existing defenses from the default game or any other targeting GameObject from the Action Game Framework to work without extra compatibility code. SINK\_SPEED and SINK\_TIME are constants used for death animation. velocity provides the Zombunny's current velocity for any consumers of the Targetable parent class. LastVelocity stores the previous movement vector as a PolarVector, in a format more congenial to the pathfinding algorithm. Fitness is an interface used to grab the effectiveness of this ZombieAgent at the end of its lifespan by the GenomeManager class. inVision keeps track of all nearby objects that the Zombunny can see for use in its pathfinding algorithm. the alignment is used for purposes of checking whether a Zombunny can damage other GameObjects, while visionCollider and damageCollider are the areas within which a Zombunny can see and deal damage from, respectively. The Rigidbody rigidBody handles physical collisions for movement purposes, while anim keeps track of the Zombunny's animation state, namely walking, idling, or death.
+
+\imfig{ZombieAgentInit}{The Genome, Awake, and Start methods of the ZombieAgent class}
+
+In Figure 14, Genome instantiates a 
+
 
 
 %Overview
