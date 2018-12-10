@@ -4,6 +4,7 @@ using UnityEngine;
 using Evolution;
 using TowerDefense.Agents;
 using Redzen.Numerics.Distributions.Float;
+using Util;
 
 namespace TowerDefense.Level
 {
@@ -11,20 +12,20 @@ namespace TowerDefense.Level
         /// <summary>
         /// How many zombunnies to spawn
         /// </summary>
-        public readonly int POPULATION_SIZE = 10;
+        public static readonly int POPULATION_SIZE = 10;
 
         /// <summary>
         /// The mutation rate
         /// </summary>
-        public readonly float MUTATION_RATE = 0.2f;
+        public static readonly float MUTATION_RATE = 0.2f;
 
-        public readonly float GROWTH_RATE = 0.3f;
+        public static readonly float GROWTH_RATE = 0.3f;
 
-        public readonly float SPAWN_DELAY = 2f;
+        public static readonly float SPAWN_DELAY = 2f;
 
-        private readonly static float STARTING_TOTAL = 16f;
+        private static readonly float STARTING_TOTAL = 16f;
 
-        private readonly static double INITIAL_FITNESS = 0.0;
+        private static readonly double INITIAL_FITNESS = 0.0;
 
         /// <summary>
         /// The prefab to spawn as an enemy
@@ -68,7 +69,13 @@ namespace TowerDefense.Level
         private void NextWave()
         {
             var nextWave = new Stack<Genome>(POPULATION_SIZE);
+
+            //Cull wave
+            var culled = Cull(currentMap);
+            
             // Reproduce Here! dict -> list
+            
+
             foreach (var pair in currentMap)
             {
                 if (pair.Key == null) continue;
@@ -103,6 +110,48 @@ namespace TowerDefense.Level
             {
                 ZombieDied(agentInstance);
             };
+        }
+
+        private static List<Pair<double, Genome>> Cull(Dictionary<Genome, double> toCull)
+        {
+            double max_fitness = 0;
+            foreach (var fitness in toCull.Values)
+            {
+                if (fitness > max_fitness)
+                {
+                    max_fitness = fitness;
+                }
+            }
+            var ret = new List<Pair<double, Genome>>(toCull.Count);
+            foreach (var pair in toCull)
+            {
+                var chance = pair.Value / max_fitness;
+                if (Random.value < chance)
+                {
+                    ret.Add(new Pair<double, Genome>(pair.Value, pair.Key));
+                }
+            }
+            return ret;
+        }
+
+        private static Stack<Genome> Reproduce(List<Pair<double, Genome>> toReproduce)
+        {
+            var nextWave = new Stack<Genome>(POPULATION_SIZE);
+            var unshuffled = new List<Genome>(POPULATION_SIZE);
+            double sum_fitness = 0;
+            foreach (var pair in toReproduce)
+            {
+                sum_fitness += pair.First;
+            }
+            for(int ii = 0; ii < POPULATION_SIZE - toReproduce.Count; ++ii)
+            {
+                double rand = Random.value * sum_fitness;
+                double last_pos = 0;
+                for(int jj = 0; jj < toReproduce.Count; ++jj)
+                {
+
+                }
+            }
         }
 
         //Callback function on zombunny death
