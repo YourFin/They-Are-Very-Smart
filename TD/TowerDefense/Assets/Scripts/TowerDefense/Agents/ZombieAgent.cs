@@ -17,7 +17,7 @@ namespace TowerDefense.Agents
     {
         private readonly static float SINK_SPEED = 2.5f;
         private readonly static float SINK_TIME = 2.0f;
-        private readonly static float STARVATION_DISTANCE = 70.0f;
+        private readonly static float STARVATION_DISTANCE = 40.0f;
 
         public override Vector3 velocity
         {

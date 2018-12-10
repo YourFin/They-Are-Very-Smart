@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Core.Health;
 using TowerDefense.Level;
 using UnityEngine;
@@ -64,7 +65,7 @@ namespace TowerDefense.UI.HUD
 				return;
 			}
 			float currentHealth = levelManager.GetAllHomeBasesHealth();
-			display.text = currentHealth.ToString(CultureInfo.InvariantCulture);
-		}
+			display.text = Math.Round(currentHealth, 2).ToString(CultureInfo.InvariantCulture);
+		}   
 	}
 }
