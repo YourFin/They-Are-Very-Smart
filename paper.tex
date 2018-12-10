@@ -151,7 +151,7 @@ The PolarVector class encapsulates the internal representation that we use for s
 
 \imfigB{PolarVector1}{The basics of PolarVector}
 
-The implementation details of PolarVector's conversion functions are fairly trivially derived from math, but it should be noted that all Cartesian components are encoded as Vector3 components as the game takes place on the X-Z plane (see Figure 6). 
+The implementation details of PolarVector's conversion functions are fairly trivially derived from math, but it should be noted that all Cartesian components are encoded as Vector3 components as the game takes place on the X-Z plane (see Figure 6).
 
 \imfigB{PolarVector2}{Conversion functions for PolarVector}
 
@@ -190,7 +190,7 @@ Redzen is a general-purpose utilities library for C\# that contains the fast ran
 
 \subsubsection{ZombieAgent}
 
-ZombieAgent is a GameObject which determines Zombunny behavior and stats from a genome and keeps track of fitness for each individual Zombunny. To do so, ZombieAgent pulls all the stat-determining values from the genome and applies them upon instantiation, i.e. setting health, damage, and speed as determined by the genome, as well as handling tick-to-tick operations during a Zombunny's lifetime. These tick-to-tick operations include choosing the next movement vector based on the location of nearby GameObjects and agent's current status. 
+ZombieAgent is a GameObject which determines Zombunny behavior and stats from a genome and keeps track of fitness for each individual Zombunny. To do so, ZombieAgent pulls all the stat-determining values from the genome and applies them upon instantiation, i.e. setting health, damage, and speed as determined by the genome, as well as handling tick-to-tick operations during a Zombunny's lifetime. These tick-to-tick operations include choosing the next movement vector based on the location of nearby GameObjects and agent's current status.
 
 \imfig{ZombieAgent1}{ZombieAgent class parameters}
 
@@ -198,8 +198,64 @@ In Figure 13, observe that the ZombieAgent class inherits from the Targetable cl
 
 \imfig{ZombieAgentInit}{The Genome, Awake, and Start methods of the ZombieAgent class}
 
-In Figure 14, one can see the Genome, Awake, and Start methods of the ZombieAgent class. Genome instantiates a Zombunny's Genome object by pulling the var health from the given Genome, calling the SetMaxHealth and SetHealth methods, and setting the initial velocity vector to have an initial direction of $270^\circ$\----that is, in the general direction of the player's base relative to the spawn location, and magnitude determined by the MovementSpeed variable from the given Genome. Awake calls the underlying (base) Awake function and adds custom OnDeath behavior to a Zombunny. Start initializes the inVision HashSet of Targetable objects, which keeps track of nearby visible GameObjects. In the unexpected case that genome or lastVelocity are null, Start initializes these to default values (the "Zero" genome and a default velocity vector).
+In Figure 14, one can see the Genome, Awake, and Start methods of the
+ZombieAgent class. Genome instantiates a Zombunny's Genome object by pulling the
+var health from the given Genome, calling the SetMaxHealth and SetHealth
+methods, and setting the initial velocity vector to have an initial direction of
+$270^\circ$\----that is, in the general direction of the player's base relative
+to the spawn location, and magnitude determined by the MovementSpeed variable
+from the given Genome. Awake calls the underlying (base) Awake function and adds
+custom OnDeath behavior to a Zombunny. Start initializes the inVision HashSet of
+Targetable objects, which keeps track of nearby visible GameObjects. In the
+unexpected case that genome or lastVelocity are null, Start initializes these to
+default values (the "Zero" genome and a default velocity vector).
 
+\imfig{ZombieAgentVision}{The methods for keeping track of GameObjects entering
+  and exiting a Zombunny's visionCollider}
+
+Figure 15 shows the OnTriggerEnter and OnTriggerExit methods of the ZombieAgent
+class, which are used in conjunction with a Zombunny's visionCollider to update
+the inVision HashSet whenever a GameObject enters or exits the Zombunny's
+visionCollider radius.
+
+\imfig{ZombieAgentUpdateNearby}{The portions of the FixedUpdate method for
+determining the position of nearby objects relative to a Zombunny}
+
+Figure 16 shows the functions used to determine the position of GameObjects in
+inVision relative to a Zombunny's previous direction vector, stored as a
+dictionary of Targetables to PolarVectors. This allows a Zombunny to keep track
+of visible GameObjects relative to where it is currently facing.
+
+\imfig{ZombieAgentUpdateMovement}{The function of FixedUpdate for handling
+  movement between ticks}
+
+Figure 17 shows the portion of FixedUpdate dedicated to rotating a Zombunny from
+tick to tick, calling the Rotate method of the lastVelocity PolarVector using
+the CalculateDirection method of the genome class, taking into account the
+Zombunny's previous velocity vector, the time alive, the Zombunny's current
+health, and the aforementioned dictionary of nearby GameObjects.
+
+\imfig{ZombieAgentUpdateDeath}{The portion of FixedUpdate that handles
+  death/deletion}
+
+Figure 18 shows the part of the FixedUpdate method which keeps track of Zombunny
+death, destroying the Zombunny GameObject at the appropriate time and calling
+the relevant death animations. For every tick that a Zombunny is not dead,
+FixedUpdate will increment timeAlive, which is later used as a factor in
+calculating fitness.
+
+
+\subsubsection{ZombieAttacker}
+
+The ZombieAttacker class calls Update on each tick, dealing damage to any item
+in toAttack, which is a HashSet of Targetable GameObjects that intersect with
+a Zombunny's attack collider (see Figure 4). This way, a Zombunny can attack
+multiple GameObjects so long as they intersect with its attack collider. Damage
+is applied to items in toAttack by calling their individual takeDamage methods,
+with the damage dealt as determined by the Zombunny's genome passed as a
+parameter.
+
+\imfig{}{}
 
 
 %Overview
