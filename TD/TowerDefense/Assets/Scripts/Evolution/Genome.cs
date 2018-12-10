@@ -12,9 +12,10 @@ namespace Evolution
         private readonly static float HEALTH_SCALE = 1;
         private readonly static float DAMAGE_SCALE = 1;
         private readonly static float MOVEMENT_SCALE = 0.4f;
-        
-        private static int current_id = 0;
 
+        private static ActivationSoftMax softMax;
+
+        private static int current_id = 0;
         private static int id_counter = 0;
 
         // ID # Makes sure that all genomes hash differently
@@ -27,26 +28,27 @@ namespace Evolution
             }
         }
 
-        // TODO: Use SoftMax for these distributions
-
-        private float health;
+        private float health_points;
+        private float health_scalar;
         public float Health {
             get {
-                return HEALTH_SCALE * (1 + health) * divisor;
+                return HEALTH_SCALE * health_scalar * totalStats;
             }
         }
 
-        private float damage;
+        private float damage_points;
+        private float damage_scalar;
         public float Damage {
             get {
-                return DAMAGE_SCALE * (1 + damage) * divisor;
+                return DAMAGE_SCALE * damage_scalar * totalStats;
             }
         }
 
-        private float movementSpeed;
+        private float speed_points;
+        private float speed_scalar;
         public float MovementSpeed {
             get {
-                return MOVEMENT_SCALE * (1 + movementSpeed) * divisor;
+                return MOVEMENT_SCALE * speed_scalar * totalStats;
             }
         }
 
@@ -59,10 +61,12 @@ namespace Evolution
             }
             set {
                 totalStats = value;
-                var NUM_STATS = 3;
-                var sum = movementSpeed + damage + health + NUM_STATS - Mathf.Min(movementSpeed, damage, health);
-                divisor = totalStats / (sum);
-                MonoBehaviour.print("Movement Speed: " + MovementSpeed);
+                double[] stat_array = new double[] { speed_points, damage_points, health_points };
+                softMax.ActivationFunction(stat_array, 0, stat_array.Length);
+                speed_scalar = (float)stat_array[0];
+                damage_scalar = (float)stat_array[1];
+                health_scalar = (float)stat_array[2];
+                MonoBehaviour.print($"Health: ({health_scalar}, {Health}), Damage: ({damage_scalar}, {Damage}), Speed: ({speed_scalar}, {MovementSpeed})");
             }
         }
 
@@ -72,9 +76,10 @@ namespace Evolution
 
         public Genome(float health, float damage, float movementSpeed, float totalStats)
         {
-            this.health = health;
-            this.damage = damage;
-            this.movementSpeed = movementSpeed;
+            if (softMax == null) softMax = new ActivationSoftMax();
+            this.health_points = health;
+            this.damage_points = damage;
+            this.speed_points = movementSpeed;
             this.TotalStats = totalStats;
             id = current_id;
             current_id++;
@@ -92,9 +97,9 @@ namespace Evolution
         public Genome mutate(ZigguratGaussianSampler sampler, float difficultyModifier)
         {
             return new Genome(
-                health + sampler.Sample(), 
-                damage + sampler.Sample(), 
-                movementSpeed + sampler.Sample(), 
+                health_points + sampler.Sample(), 
+                damage_points + sampler.Sample(), 
+                speed_points + sampler.Sample(), 
                 this.totalStats + difficultyModifier
                 );
         }
@@ -110,8 +115,8 @@ namespace Evolution
         /// <returns>direction, The direction to move in</returns>
         public float CalculateDirection(
             PolarVector previous_direction, 
-            int time_alive, 
-            float health, 
+            int time_alive,
+            float health,
             Dictionary<Targetable, PolarVector> nearby
             )
         {
