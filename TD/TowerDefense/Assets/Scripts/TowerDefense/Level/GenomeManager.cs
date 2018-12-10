@@ -147,11 +147,35 @@ namespace TowerDefense.Level
             {
                 double rand = Random.value * sum_fitness;
                 double last_pos = 0;
-                for(int jj = 0; jj < toReproduce.Count; ++jj)
+                int jj;
+                for(jj = 0; jj < toReproduce.Count; ++jj)
                 {
-
+                    last_pos += toReproduce[jj].First;
+                    if (rand < last_pos) break;
                 }
+                unshuffled.Add(toReproduce[jj].Second);
             }
+            foreach (var pair in toReproduce)
+            {
+                unshuffled.Add(pair.Second);
+            }
+            // Shuffle genome
+            return new Stack<Genome>(unshuffled);
+        }
+
+        private static List<Genome> Shuffle(List<Genome> genomes)
+        {
+            //FIXME
+            int n = genomes.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = Random.Range(0, 1);
+                Genome value = genomes[k];
+                genomes[k] = genomes[n];
+                genomes[n] = value;
+            }
+            return genomes;
         }
 
         //Callback function on zombunny death
