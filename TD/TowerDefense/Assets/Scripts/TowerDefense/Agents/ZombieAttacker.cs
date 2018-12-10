@@ -42,7 +42,10 @@ public class ZombieAttacker : MonoBehaviour {
                     zombieAgent.configuration.alignmentProvider
                 );
                 zombieAgent.addDamageDone(damage);
-                this.zombieAgent.addDamageDone(health - item.configuration.currentHealth);
+                if (damage > 0)
+                {
+                    zombieAgent.ResetStarvation();
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ namespace TowerDefense.Agents
     {
         private readonly static float SINK_SPEED = 2.5f;
         private readonly static float SINK_TIME = 2.0f;
+        private readonly static float STARVATION_DISTANCE = 70.0f;
 
         public override Vector3 velocity
         {
@@ -44,6 +45,7 @@ namespace TowerDefense.Agents
         // For debug purposes only
         public float CurrentHealth = 0.1f;
         protected float damageDone = 0;
+        protected float distanceToStarve;
         
         // Increment total damage done over a zombie's lifetime
         public void addDamageDone(float increment)
@@ -74,6 +76,9 @@ namespace TowerDefense.Agents
         {
             base.Awake();
             configuration.died += OnDeath;
+            distanceToStarve = STARVATION_DISTANCE;
+            // Reset starvation on take damage
+            configuration.damaged += (_) => ResetStarvation();
         }
 
         /// <summary>
@@ -152,8 +157,17 @@ namespace TowerDefense.Agents
                 transform.position + 
                 (lastVelocity.toVector3() * Time.deltaTime));
 
+            // Starving
+            distanceToStarve -= lastVelocity.magnitude * Time.deltaTime;
+            if (distanceToStarve < 0) this.Kill();
+
             //For debug purposes only
             CurrentHealth = configuration.currentHealth;
+        }
+
+        public void ResetStarvation()
+        {
+            distanceToStarve = STARVATION_DISTANCE;
         }
 
         protected virtual void OnDeath(HealthChangeInfo _)
