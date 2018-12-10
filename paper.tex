@@ -198,7 +198,7 @@ In Figure 13, observe that the ZombieAgent class inherits from the Targetable cl
 
 \imfig{ZombieAgentInit}{The Genome, Awake, and Start methods of the ZombieAgent class}
 
-In Figure 14, Genome instantiates a 
+In Figure 14, one can see the Genome, Awake, and Start methods of the ZombieAgent class. Genome instantiates a Zombunny's Genome object by pulling the var health from the given Genome, calling the SetMaxHealth and SetHealth methods, and setting the initial velocity vector to have an initial direction of $270^\circ$\----that is, in the general direction of the player's base relative to the spawn location, and magnitude determined by the MovementSpeed variable from the given Genome. Awake calls the underlying (base) Awake function and adds custom OnDeath behavior to a Zombunny. Start initializes the inVision HashSet of Targetable objects, which keeps track of nearby visible GameObjects. In the unexpected case that genome or lastVelocity are null, Start initializes these to default values (the "Zero" genome and a default velocity vector).
 
 
 
