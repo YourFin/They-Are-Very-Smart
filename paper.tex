@@ -110,7 +110,7 @@ Defenses cost money, which may be gained by killing attacking enemies. As the ga
 
 \imfig{BaseExample}{An example set of player defenses around the home base}
 In \tavs, the player must defend their home base against the aforementioned
-onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies
+onslaught of enemies such as the fearsome Zombunny (see Figure 4). Zombunnies
 are driven by a single goal: destruction of the player's home base. Zombunnies
 spawn in groups of ten (separated by a slight delay) at the beginning of the
 game. Subsequent waves spawn after all members from the previous wave have died.
@@ -157,7 +157,7 @@ thwart the player's defenses and end the game.
 
 \tavs~was initially inspired by Numantian Games' \textit{They Are Billions}, a game in which a player must build defenses in order to fend off a zombie apocalypse. The game features massive numbers of zombies. This project emerged from an interest in what \textit{They Are Billions} would be like if the zombies could actually think for themselves. The result is significantly pared down in comparison, as the focus has been on zombie evolution as opposed to player interactivity and enjoyability. However, similarities to \textit{They Are Billions} can be seen in the resource management system, the player's defense of a citadel, and need to fend off the faceless hordes. In contrast, \textit{They Are Billions} puts additional emphasis on world generation, player exploration, and narrative elements.
 
-Insert picture of \textit{They Are Billions} gameplay here.
+%Insert picture of \textit{They Are Billions} gameplay here.%
 
 \section{Background}
 In \tavs, we utilize a basic genetic algorithm to train a recurrent neural network generated using the Neuroevolution of Augmenting Topologies (NEAT) method and \href{https://www.heatonresearch.com/encog/}{Encog} framework, which can be found \href{https://sharpneat.sourceforge.net/}{here}, which is a generalized deep-learning library that includes implementations of NEAT and HyperNEAT.
@@ -212,19 +212,19 @@ Figure 11 shows the NextWave function, which handles the wave-to-wave portions o
 
 \imfig{GenomeManagerNextWave}{The NextWave method of GenomeManager}
 
-The Spawn method, as seen in Figure 12, is called every SPAWN\_DELAY interval POPULATION\_COUNT times. The function starts by spawning a Zombunny with no genome due to the inability to provide parameters upon GameObject instantiation. Therefore, we set the genome after the fact, popping it off of the toSpawn stack, also adding the ZombieDied function to the removed event on said Zombunny, which allows us to execute code in the context of the GenomeManager upon Zombunny death; namely, ZombunnyDied. ZombunnyDied handles finding the fitness of Zombunnies and adding them to the list of completed genomes, as well as calling NextWave again when the last Zombunny in the wave dies.
+The Spawn method, as seen in Figure 12, is called at every SPAWN\_DELAY interval POPULATION\_COUNT times. The function starts by spawning a Zombunny with no genome due to the inability to provide parameters upon GameObject instantiation. Therefore, we set the genome after the fact, popping it off of the toSpawn stack, also adding the ZombieDied function to the removed event on said Zombunny, which allows us to execute code in the context of the GenomeManager upon Zombunny death; namely, ZombunnyDied. ZombunnyDied handles finding the fitness of Zombunnies and adding them to the list of completed genomes, as well as calling NextWave again when the last Zombunny in the wave dies.
 
 \imfig{GenomeManagerSpawn}{Spawning machinery of the GenomeManager class}
 
 \subsubsection{Redzen}
 
-Redzen is a general-purpose utilities library for C\# that contains the fast random function that we use. However, it should be noted that the library as it may be found online at the time of writing does not compile with the older C\# compiler that Unity uses. Thus, we had to manually delete most of the library files and remove underscore digit separators from some numeric constants, as they are a C\# 7 feature. You can find our compatible library at \path{They-Are-Very-Smart/TD/TowerDefense/Assets/Scripts/Util/Redzen}
+Redzen is a general-purpose utilities library for C\# that contains the fast random function that we use. However, it should be noted that the library as it may be found online at the time of writing does not compile with the older C\# compiler that Unity uses. Thus, we had to manually delete most of the library files and remove underscore digit separators from some numeric constants, as they are a C\# 7 feature. You can find our compatible library at \path{They-Are-Very-Smart/TD/TowerDefense/Assets/Scripts/Util/Redzen}.
 
 \subsubsection{ZombieAgent}
 
-ZombieAgent is a GameObject which determines Zombunny behavior and stats from a genome and keeps track of fitness for each individual Zombunny. To do so, ZombieAgent pulls all the stat-determining values from the genome and applies them upon instantiation, i.e. setting health, damage, and speed as determined by the genome, as well as handling tick-to-tick operations during a Zombunny's lifetime. These tick-to-tick operations include choosing the next movement vector based on the location of nearby GameObjects and agent's current status.
+ZombieAgent is a GameObject which determines Zombunny behavior and stats from a genome and keeps track of fitness for each individual Zombunny. To do so, ZombieAgent pulls all the stat-determining values from the genome and applies them upon instantiation, i.e. setting health, damage, and speed as determined by the genome, as well as handling tick-to-tick operations during a Zombunny's lifetime. These tick-to-tick operations include choosing the next movement vector based on the location of nearby GameObjects and agents' current status.
 
-\imfig{ZombieAgent1}{ZombieAgent class parameters}
+\imfigH{ZombieAgent1}{ZombieAgent class parameters}
 
 In Figure 13, observe that the ZombieAgent class inherits from the Targetable class. Targetable is the parent class for every GameObject in the Action Game Framework, which can be automatically fired upon by ranged weapons, i.e. targeted. This also allows any existing defenses from the default game or any other targeting GameObject from the Action Game Framework to work without extra compatibility code. SINK\_SPEED and SINK\_TIME are constants used for death animation. velocity provides the Zombunny's current velocity for any consumers of the Targetable parent class. LastVelocity stores the previous movement vector as a PolarVector, in a format more congenial to the pathfinding algorithm. Fitness is an interface used to grab the effectiveness of this ZombieAgent at the end of its lifespan by the GenomeManager class. inVision keeps track of all nearby objects that the Zombunny can see for use in its pathfinding algorithm. the alignment is used for purposes of checking whether a Zombunny can damage other GameObjects, while visionCollider and damageCollider are the areas within which a Zombunny can see and deal damage from, respectively. The Rigidbody rigidBody handles physical collisions for movement purposes, while anim keeps track of the Zombunny's animation state, namely walking, idling, or death.
 
@@ -242,7 +242,7 @@ Targetable objects, which keeps track of nearby visible GameObjects. In the
 unexpected case that genome or lastVelocity are null, Start initializes these to
 default values (the "Zero" genome and a default velocity vector).
 
-\imfig{ZombieAgentVision}{The methods for keeping track of GameObjects entering
+\imfigH{ZombieAgentVision}{Methods for keeping track of GameObjects entering
   and exiting a Zombunny's visionCollider}
 
 Figure 15 shows the OnTriggerEnter and OnTriggerExit methods of the ZombieAgent
@@ -250,7 +250,7 @@ class, which are used in conjunction with a Zombunny's visionCollider to update
 the inVision HashSet whenever a GameObject enters or exits the Zombunny's
 visionCollider radius.
 
-\imfig{ZombieAgentUpdateNearby}{The portions of the FixedUpdate method for
+\imfigB{ZombieAgentUpdateNearby}{The portion of the FixedUpdate method for
 determining the position of nearby objects relative to a Zombunny}
 
 Figure 16 shows the functions used to determine the position of GameObjects in
@@ -261,11 +261,11 @@ of visible GameObjects relative to where it is currently facing.
 \imfig{ZombieAgentUpdateMovement}{The function of FixedUpdate for handling
   movement between ticks}
 
-Figure 17 shows the portion of FixedUpdate dedicated to rotating a Zombunny from
-tick to tick, calling the Rotate method of the lastVelocity PolarVector using
-the CalculateDirection method of the genome class, taking into account the
-Zombunny's previous velocity vector, the time alive, the Zombunny's current
-health, and the aforementioned dictionary of nearby GameObjects.
+Figure 17 shows the portion of FixedUpdate dedicated to altering a Zombunny's
+trajectory from tick to tick, calling the Rotate method of the lastVelocity
+PolarVector using the CalculateDirection method of the genome class, taking into
+account the Zombunny's previous velocity vector, time alive, current health, and
+the aforementioned dictionary of nearby GameObjects.
 
 \imfig{ZombieAgentUpdateDeath}{The portion of FixedUpdate that handles
   death/deletion}
@@ -275,7 +275,6 @@ death, destroying the Zombunny GameObject at the appropriate time and calling
 the relevant death animations. For every tick that a Zombunny is not dead,
 FixedUpdate increments timeAlive, which is later used as a factor in
 calculating fitness.
-
 
 \subsubsection{ZombieAttacker}
 
@@ -291,6 +290,9 @@ parameter.
 
 
 
+\subsection{Evolution}
+
+In \
 
 
 %Overview
