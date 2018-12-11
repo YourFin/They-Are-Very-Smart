@@ -45,8 +45,8 @@ namespace TowerDefense.Level
         private Stack<Genome> toSpawn;
         private ZombieAgent prefabAgent;
         private ZigguratGaussianSampler sampler;
-
-        private void Start()
+            
+        public void StartSpawning()
         {
             GenerateInitialGenomes();
             NextWave();

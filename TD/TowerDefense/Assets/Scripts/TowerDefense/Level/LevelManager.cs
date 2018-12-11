@@ -11,7 +11,7 @@ namespace TowerDefense.Level
 	/// <summary>
 	/// The level manager - handles the level states and tracks the player's currency
 	/// </summary>
-	[RequireComponent(typeof(WaveManager))]
+	[RequireComponent(typeof(GenomeManager)),RequireComponent(typeof(WaveManager))]
 	public class LevelManager : Singleton<LevelManager>
 	{
 		/// <summary>
@@ -51,6 +51,11 @@ namespace TowerDefense.Level
 		/// The attached wave manager
 		/// </summary>
 		public WaveManager waveManager { get; protected set; }
+
+        /// <summary>
+        /// Genome manager
+        /// </summary>
+        public GenomeManager genomeManager;
 
 		/// <summary>
 		/// Number of enemies currently in the level
@@ -276,7 +281,7 @@ namespace TowerDefense.Level
 			switch (newState)
 			{
 				case LevelState.SpawningEnemies:
-					waveManager.StartWaves();
+                    genomeManager.StartSpawning();
 					break;
 				case LevelState.AllEnemiesSpawned:
 					// Win immediately if all enemies are already dead
