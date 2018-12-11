@@ -160,22 +160,29 @@ namespace TowerDefense.Level
                 unshuffled.Add(pair.Second);
             }
             // Shuffle genome
-            return new Stack<Genome>(unshuffled);
+            return Shuffle(unshuffled);
         }
 
-        private static List<Genome> Shuffle(List<Genome> genomes)
+        /// <summary>
+        /// Simple Fisher-Yates Shuffle
+        /// WARNING: CONSUMES INPUT
+        /// </summary>
+        /// <param name="genomes"></param>
+        /// <returns></returns>
+        private static Stack<Genome> Shuffle(List<Genome> genomes)
         {
-            //FIXME
+            var ret = new Stack<Genome>(genomes.Count);
             int n = genomes.Count;
             while (n > 1)
             {
                 n--;
-                int k = Random.Range(0, 1);
+                int k = Random.Range(0, n);
                 Genome value = genomes[k];
                 genomes[k] = genomes[n];
                 genomes[n] = value;
+                ret.Push(value);
             }
-            return genomes;
+            return ret;
         }
 
         //Callback function on zombunny death
