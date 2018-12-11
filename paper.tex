@@ -181,6 +181,7 @@ the Unity editor with the context for this paper.
 \subsubsection{PolarVector}
 The PolarVector class encapsulates the internal representation that we use for storing and passing vectors to the neural net, as well as keeping track of the previous direction a Zombunny was headed during the previous tick. The PolarVector class essentially wraps a float, direction (in degrees) and a float, magnitude, which provides sufficient information to create a new vector in two-dimensional space. The PolarVector class provides some convenient helper methods for converting between Cartesian and Polar coordinate systems, as the Unity engine primarily uses Cartesian coordinates.
 
+%figure 5%
 \imfigB{PolarVector1}{The basics of PolarVector}
 
 The implementation details of PolarVector's conversion functions are fairly trivially derived from math, but it should be noted that all Cartesian components are encoded as Vector3 components as the game takes place on the X-Z plane (see Figure 6).
@@ -196,7 +197,7 @@ In Figure 7, we can see the constants that are used to scale a Zombunny's health
 
 \imfig{Mutation}{Mutation procedure of the Genome class}
 
-The mutation function in Figure 8 essentially creates a new copy of the current genome, nudged by normally distributed random numbers.
+The mutation function in Figure 8 essentially creates a new copy of the current genome, which is then nudged by normally distributed random numbers.
 
 \subsubsection{GenomeManager}
 
@@ -250,7 +251,7 @@ class, which are used in conjunction with a Zombunny's visionCollider to update
 the inVision HashSet whenever a GameObject enters or exits the Zombunny's
 visionCollider radius.
 
-\imfigB{ZombieAgentUpdateNearby}{The portion of the FixedUpdate method for
+\imfigH{ZombieAgentUpdateNearby}{The portion of the FixedUpdate method for
 determining the position of nearby objects relative to a Zombunny}
 
 Figure 16 shows the functions used to determine the position of GameObjects in
@@ -258,7 +259,7 @@ inVision relative to a Zombunny's previous direction vector, stored as a
 dictionary of Targetables to PolarVectors. This allows a Zombunny to keep track
 of visible GameObjects relative to where it is currently facing.
 
-\imfig{ZombieAgentUpdateMovement}{The function of FixedUpdate for handling
+\imfig{ZombieAgentUpdateMovement}{The function of FixedUpdate that handles
   movement between ticks}
 
 Figure 17 shows the portion of FixedUpdate dedicated to altering a Zombunny's
@@ -282,17 +283,17 @@ The ZombieAttacker class (see Figure 19) calls Update on each tick, dealing dama
 in toAttack, which is a HashSet of Targetable GameObjects that intersect with
 a Zombunny's attack collider (see Figure 4). This way, a Zombunny can attack
 multiple GameObjects so long as they intersect with its attack collider. Damage
-is applied to items in toAttack by calling their individual takeDamage methods,
-with the damage dealt as determined by the Zombunny's genome passed as a
-parameter.
+is applied to items in toAttack by calling their individual takeDamage methods.
+Damage dealt is determined by the Zombunny's genome, and is passed as a parameter 
+to takeDamage.
 
 \imfig{ZombieAttacker}{The Update method of the ZombieAttacker class}
 
 
 
-\subsection{Evolution}
+\subsection{Genetic Algorithm}
 
-In \
+In \tavs, 
 
 
 %Overview
@@ -332,8 +333,8 @@ this project was spent dealing with learning the basics of Unity and C\#, which
 presented a very significant challenge that we vastly underestimated.
 
 At this time, we are waiting on actual results from our project.
-We hope that given a large enough population of zombies, we might see
-populations of zombies evolving to counteract players' strategies. Evolution
+We hope that given a large enough population of Zombunnies, we might see
+populations of Zombunnies evolving to counteract players' strategies. Evolution
 will likely have little trouble tackling a trivial or consistent player
 strategy, like rebuilding the same towers in the same place and
 relying heavily on a single tower type, but may have trouble keeping
@@ -369,7 +370,7 @@ determine it's own speed. The two previous approaches could even be combined for
 as dynamic an evolution environment as possible.
 
 Sexual (genderless) reproduction could also be introduced as a way of trying to
-increase diversity. Plain sexual reproduction without any further restrictions
+incentivize diversity. Plain sexual reproduction without any further restrictions
 could allow good traits that evolve in parallel to be combined into a single
 individual with the benefits of both, which has fairly obvious advantages.
 This simple approach to sexual reproduction could, however, force a single
@@ -380,8 +381,8 @@ condition reproduction on similarity, such genomes are more likely to reproduce
 with those that are structurally similar. Another approach would be to allow
 genomes to determine mating preference based on other genomes' content and
 fitness, and then run them through a tournament to determine mates. This would
-have the additional benefit of allowing additional emergent behavior that has
-not been conceived of in this speculation.
+have the additional benefit of allowing emergent behavior that has not been 
+conceived of in this speculation.
 
 Conceptually, evolving neural nets instead of using backpropagation
 has the massive benefit of not worrying about how to differentiate and nicely
