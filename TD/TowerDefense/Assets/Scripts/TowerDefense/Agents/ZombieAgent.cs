@@ -62,12 +62,6 @@ namespace TowerDefense.Agents
             }
             set
             {
-                lastVelocity = new PolarVector(270);
-                genome = value;
-                var health = genome.Health;
-                configuration.SetMaxHealth(health);
-                configuration.SetHealth(health);
-                lastVelocity.magnitude = genome.MovementSpeed;
                 genome = value;
             }
         }
@@ -91,6 +85,20 @@ namespace TowerDefense.Agents
             {
                 this.lastVelocity = new PolarVector(0, 1f);
             }
+        }
+
+        public void Initialize(Genome genome, Vector3 target, Vector3 spawnPostition)
+        {
+            target.y = 0;
+            spawnPostition.y = 0;
+            var difference = target - spawnPostition;
+            print($"Target: {target}, Spawn: {spawnPostition}, Difference: {difference}");
+            lastVelocity = PolarVector.fromVector3(difference);
+            this.genome = genome;
+            var health = genome.Health;
+            configuration.SetMaxHealth(health);
+            configuration.SetHealth(health);
+            lastVelocity.magnitude = genome.MovementSpeed;
         }
 
         private void OnTriggerEnter(Collider other)

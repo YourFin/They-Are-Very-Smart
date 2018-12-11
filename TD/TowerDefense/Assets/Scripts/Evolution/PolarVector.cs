@@ -47,7 +47,9 @@ namespace Evolution
         public static PolarVector fromVector3(Vector3 vv)
         {
             Vector3 withoutY = new Vector3(vv.x, 0, vv.z);
-            return new PolarVector(withoutY.magnitude, Vector3.Angle(E1, withoutY));
+            var angle = Vector3.Angle(E1, withoutY);
+            if (withoutY.z < 0) angle = -angle;
+            return new PolarVector(angle, withoutY.magnitude);
         }
 
         public Vector3 toVector3()
@@ -62,6 +64,11 @@ namespace Evolution
         public static Vector3 toVector3(PolarVector vv)
         {
             return vv.toVector3();
+        }
+
+        public override string ToString()
+        {
+            return $"({this.direction} deg, {magnitude})";
         }
     }
 }

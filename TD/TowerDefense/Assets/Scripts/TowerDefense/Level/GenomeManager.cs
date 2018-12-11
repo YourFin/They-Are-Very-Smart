@@ -8,6 +8,7 @@ using Util;
 
 namespace TowerDefense.Level
 {
+    [RequireComponent(typeof(PlayerHomeBase))]
     public class GenomeManager : MonoBehaviour {
         /// <summary>
         /// How many zombunnies to spawn
@@ -37,15 +38,21 @@ namespace TowerDefense.Level
         /// </summary>
         public List<Transform> SpawnPoints;
 
+        /// <summary>
+        /// Where the zombies start facing
+        /// </summary>
+        public PlayerHomeBase target;
+
         private int remaining_alive;
         private List<Dictionary<Genome, double>> genomeMaps;
         private Dictionary<Genome, double> currentMap;
+
 
         // TODO
         private Stack<Genome> toSpawn;
         private ZombieAgent prefabAgent;
         private ZigguratGaussianSampler sampler;
-            
+        
         public void StartSpawning()
         {
             GenerateInitialGenomes();
@@ -102,10 +109,9 @@ namespace TowerDefense.Level
                 CancelInvoke("Spawn");
             }
             int spawn_index = Random.Range(0, SpawnPoints.Count);
-
             var prefabInstance = Instantiate(ZombiePrefab, SpawnPoints[spawn_index]);
             var agentInstance = prefabInstance.GetComponent<ZombieAgent>();
-            agentInstance.Genome = toSpawn.Pop();
+            agentInstance.Initialize(toSpawn.Pop(), target.position, SpawnPoints[spawn_index].position);
             agentInstance.removed += (_) =>
             {
                 ZombieDied(agentInstance);
