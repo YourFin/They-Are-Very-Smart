@@ -109,7 +109,39 @@ Defenses cost money, which may be gained by killing attacking enemies. As the ga
 \pagebreak
 
 \imfig{BaseExample}{An example set of player defenses around the home base}
-In \tavs, the player must defend their home base against the aforementioned onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies are driven by a single goal: destruction of the player's home base. Zombunnies spawn in groups of ten (separated by a slight delay) at the beginning of the game. Subsequent waves spawn after all members from the previous wave have died. Zombunnies use a genetic algorithm in conjunction with a recurrent neural network to evolve a pathfinding algorithm between generations (waves), with the long-term incentive of dealing damage to the player's base (explain fitness criteria more concisely here). Zombunnies can be killed by either taking damage from a player's defenses or through "starvation." A Zombunny will starve to death if it does not take or deal damage for a given length of time. Through this starvation mechanism, the Zombunnies which survive the longest are ultimately those which interact the most with the player's defenses, and are subsequently more likely to pass on attributes of their genome to the next generation. Zombunnies have three characteristic attributes: health, damage, and movement speed. All three of these stats are assigned upon spawning as dictated by their genome. Pathfinding is controlled by a recurrent neural net, whose weights are determined through a genetic algorithm between waves, which optimizes for Zombunnies' ability to achieve their overarching goal of player base destruction. Zombunnies can "see" nearby entities within a certain radius, including other Zombunnies, player defenses, and the player's home base (when in range). Based on the combination of visible inputs, Zombunnies will output a chosen direction which they will then walk in. This algorithm updates on a tick-by-tick basis. Zombunnies will damage structures they collide with. Because evolution of the pathfinding neural net only happens between generations, near the beginning of the game, Zombunnies will start off with relatively stupid pathfinding which will typically cause the first few populations to starve to death without dealing any significant damage. This provides the player with an initial grace period during which they may build their initial defenses. As time goes on, Zombunnies will evolve towards an optimal stat distribution of health, damage, and speed, as well as in their ability to pathfind in such a way as to thwart the player's defenses and end the game.
+In \tavs, the player must defend their home base against the aforementioned
+onslaught of enemies such as the fearsome Zombunny (see Figure 3). Zombunnies
+are driven by a single goal: destruction of the player's home base. Zombunnies
+spawn in groups of ten (separated by a slight delay) at the beginning of the
+game. Subsequent waves spawn after all members from the previous wave have died.
+Zombunnies use a genetic algorithm in conjunction with a recurrent neural
+network to evolve a pathfinding algorithm between generations (waves), with the
+long-term incentive of dealing damage to the player's base% (explain fitness
+% criteria more concisely here)
+. Zombunnies can be killed by either taking damage
+from a player's defenses or through "starvation." A Zombunny will starve to
+death if it does not take or deal damage for a given length of time. Through
+this starvation mechanism, the Zombunnies which survive the longest are
+ultimately those which interact the most with the player's defenses, and are
+subsequently more likely to pass on attributes of their genome to the next
+generation. Zombunnies have three characteristic attributes: health, damage, and
+movement speed. All three of these stats are assigned upon spawning as dictated
+by their genome. Pathfinding is controlled by a recurrent neural net, whose
+weights are determined through a genetic algorithm between waves, which
+optimizes for Zombunnies' ability to achieve their overarching goal of player
+base destruction. Zombunnies can "see" nearby entities within a certain radius,
+including other Zombunnies, player defenses, and the player's home base (when in
+range). Based on the combination of visible inputs, Zombunnies will output a
+chosen direction which they will then walk in. This algorithm updates on a
+tick-by-tick basis. Zombunnies will damage structures they collide with. Because
+evolution of the pathfinding neural net only happens between generations, near
+the beginning of the game, Zombunnies will start off with relatively stupid
+pathfinding which will typically cause the first few populations to starve to
+death without dealing any significant damage. This provides the player with an
+initial grace period during which they may build their initial defenses. As time
+goes on, Zombunnies will evolve towards an optimal stat distribution of health,
+damage, and speed, as well as in their ability to pathfind in such a way as to
+thwart the player's defenses and end the game.
 
 \imfig{ZombunnyColliders}{A Zombunny, with attacker and damage colliders highlighted}
 
@@ -241,13 +273,13 @@ health, and the aforementioned dictionary of nearby GameObjects.
 Figure 18 shows the part of the FixedUpdate method which keeps track of Zombunny
 death, destroying the Zombunny GameObject at the appropriate time and calling
 the relevant death animations. For every tick that a Zombunny is not dead,
-FixedUpdate will increment timeAlive, which is later used as a factor in
+FixedUpdate increments timeAlive, which is later used as a factor in
 calculating fitness.
 
 
 \subsubsection{ZombieAttacker}
 
-The ZombieAttacker class calls Update on each tick, dealing damage to any item
+The ZombieAttacker class (see Figure 19) calls Update on each tick, dealing damage to any item
 in toAttack, which is a HashSet of Targetable GameObjects that intersect with
 a Zombunny's attack collider (see Figure 4). This way, a Zombunny can attack
 multiple GameObjects so long as they intersect with its attack collider. Damage
@@ -255,7 +287,10 @@ is applied to items in toAttack by calling their individual takeDamage methods,
 with the damage dealt as determined by the Zombunny's genome passed as a
 parameter.
 
-\imfig{}{}
+\imfig{ZombieAttacker}{The Update method of the ZombieAttacker class}
+
+
+
 
 
 %Overview
