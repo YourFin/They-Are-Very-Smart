@@ -52,16 +52,16 @@ namespace Core.Health
 		/// <param name="damageValue">Damage value.</param>
 		/// <param name="damagePoint">Damage point.</param>
 		/// <param name="alignment">Alignment value</param>
-		public virtual float TakeDamage(float damageValue, Vector3 damagePoint, IAlignmentProvider alignment)
+		public virtual bool TakeDamage(float damageValue, Vector3 damagePoint, IAlignmentProvider alignment)
 		{
 			HealthChangeInfo info;
-			configuration.TakeDamage(damageValue, alignment, out info);
+			var ret = configuration.TakeDamage(damageValue, alignment, out info);
 			var damageInfo = new HitInfo(info, damagePoint);
 			if (hit != null)
 			{
 				hit(damageInfo);
 			}
-            return damageInfo.healthChangeInfo.absHealthDifference;
+            return ret;
 		}
 
 		protected virtual void Awake()

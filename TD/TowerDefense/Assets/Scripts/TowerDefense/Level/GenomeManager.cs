@@ -111,7 +111,7 @@ namespace TowerDefense.Level
             int spawn_index = Random.Range(0, SpawnPoints.Count);
             var prefabInstance = Instantiate(ZombiePrefab, SpawnPoints[spawn_index]);
             var agentInstance = prefabInstance.GetComponent<ZombieAgent>();
-            agentInstance.Initialize(toSpawn.Pop(), target.position, SpawnPoints[spawn_index].position);
+            agentInstance.Initialize(toSpawn.Pop(), target.transform.position, SpawnPoints[spawn_index].position);
             agentInstance.removed += (_) =>
             {
                 ZombieDied(agentInstance);

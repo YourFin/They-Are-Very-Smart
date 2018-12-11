@@ -36,14 +36,14 @@ public class ZombieAttacker : MonoBehaviour {
             if (item != null)
             {
                 float health = item.configuration.currentHealth;
-                float damage = item.TakeDamage(
-                    zombieAgent.Genome.Damage * Time.deltaTime,
+                float damage_to_do = zombieAgent.Genome.Damage * Time.deltaTime;
+                if (item.TakeDamage(
+                    damage_to_do,
                     zombieAgent.transform.position,
                     zombieAgent.configuration.alignmentProvider
-                );
-                zombieAgent.addDamageDone(damage);
-                if (damage > 0)
+                ))
                 {
+                    zombieAgent.addDamageDone(damage_to_do);
                     zombieAgent.ResetStarvation();
                 }
             }
