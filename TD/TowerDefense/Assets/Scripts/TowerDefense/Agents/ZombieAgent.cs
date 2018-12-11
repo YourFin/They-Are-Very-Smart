@@ -142,23 +142,27 @@ namespace TowerDefense.Agents
             foreach(var item in inVision)
             {
                 if (item == null) continue;
-                nearbyDict.Add(
-                    item,
-                    new PolarVector(
-                            (- lastVelocity.direction) + Vector3.Angle(transform.position, item.gameObject.transform.position),
-                            Vector3.Distance(transform.position, item.gameObject.transform.position)
-                        )
-                 );
+                Vector3 zomPos = transform.position;
+                Vector3 targetPos = item.gameObject.transform.position;
+                Vector3 zomToTarget = targetPos - zomPos;
+                PolarVector zomToTargetP = PolarVector.fromVector3(zomToTarget);
+                //zomToTargetP.direction -= lastVelocity.direction;
+                nearbyDict.Add(item, zomToTargetP);
             }
 
 
             // Handle Movement
-            lastVelocity.Rotate(
-                genome.CalculateDirection(
-                lastVelocity, 
-                time_alive, 
-                configuration.currentHealth, 
-                nearbyDict));
+            //lastVelocity.Rotate(
+            //    genome.CalculateDirection(
+            //    lastVelocity, 
+            //    time_alive, 
+            //    configuration.currentHealth, 
+            //    nearbyDict));
+            lastVelocity.direction = genome.CalculateDirection(
+                lastVelocity,
+                time_alive,
+                configuration.currentHealth,
+                nearbyDict);
 
             rigidBody.MoveRotation(Quaternion.LookRotation(lastVelocity.toVector3()));
             rigidBody.MovePosition(

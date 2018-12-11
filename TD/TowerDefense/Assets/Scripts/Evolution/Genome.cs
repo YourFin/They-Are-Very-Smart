@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ActionGameFramework.Health;
 using Redzen.Numerics.Distributions.Float;
 using Encog.Engine.Network.Activation;
+using TowerDefense.Level;
 
 namespace Evolution
 {
@@ -104,6 +105,7 @@ namespace Evolution
                 );
         }
 
+
         /// <summary>
         /// Calcualtes the direction that the genome would have the zombie move
         /// </summary>
@@ -114,13 +116,35 @@ namespace Evolution
         /// <param name="nearby">dictionary from nearby entities mapped to the vector to them</param>
         /// <returns>direction, The direction to move in</returns>
         public float CalculateDirection(
-            PolarVector previous_direction, 
+            PolarVector previous_direction,
             int time_alive,
             float health,
             Dictionary<Targetable, PolarVector> nearby
             )
         {
-            return 0f;
+            KeyValuePair<Targetable, PolarVector> target;
+            bool seen = false;
+            var count = 0;
+            foreach (var pair in nearby)
+            {
+                if (pair.Key.GetType() == typeof(PlayerHomeBase)) ++count;
+            }
+
+            foreach (var pair in nearby)
+            {
+                var targetableType = pair.Key.GetType();
+                if (targetableType == typeof(PlayerHomeBase))
+                {
+                    target = pair;
+                    seen = true;
+                    break;
+                }
+            }
+            if (seen)
+            {
+                return target.Value.direction;// - previous_direction.direction;
+            }
+            return previous_direction.direction;
         }
     }
 }
