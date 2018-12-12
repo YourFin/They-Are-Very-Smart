@@ -223,11 +223,18 @@ place on the X-Z plane (see Figure 6).
 \imfigB{PolarVector2}{Conversion functions for PolarVector}
 
 \subsubsection{Genome}
-The Genome class encapsulates the data that is stored on a genome-by-genome basis, and provides most of the procedures that deal with their mutation, as well as providing conversions from their internal state to the game-useful health, speed, and damage values, as well as providing an interface to conveniently call the resulting pathfinding neural net.
+The Genome class encapsulates the data that is stored on a genome-by-genome
+basis, provides most of the procedures that deal with their mutation, provides
+conversions from their internal state to the game-useful health, speed, and
+damage values, and provides an interface to conveniently call the resulting
+pathfinding neural net.
 
 \imfigB{Genome1}{Constants and Id for the Genome class}
 
-In Figure 7, we can see the constants that are used to scale a Zombunny's health, movement speed, and damage, which need to be set manually. The Id field is used as a unique identifier if genomes need to be looked up, and also ensures that every genome will hash differently.
+In Figure 7, we can see the constants that are used to scale a Zombunny's
+health, movement speed, and damage, which need to be set manually as discussed
+in the hyperparameters sections. The Id field is used as a unique identifier if
+genomes need to be looked up, and also ensures that every genome will hash differently.
 
 \imfig{Mutation}{Mutation procedure of the Genome class}
 
