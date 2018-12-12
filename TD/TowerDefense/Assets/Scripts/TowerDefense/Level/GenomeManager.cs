@@ -28,6 +28,9 @@ namespace TowerDefense.Level
 
         private static readonly double INITIAL_FITNESS = 1.0;
 
+        // Must be greater than 1
+        private static readonly double CHANCE_BASE = 5;
+
         /// <summary>
         /// The prefab to spawn as an enemy
         /// </summary>
@@ -141,7 +144,8 @@ namespace TowerDefense.Level
 
         private static List<Pair<double, Genome>> Cull(Dictionary<Genome, double> toCull)
         {
-            double max_fitness = 0;
+            double max_fitness = toCull.GetEnumerator().Current.Value;
+            double min_fitness = toCull.GetEnumerator().Current.Value;
             foreach (var fitness in toCull.Values)
             {
                 if (fitness > max_fitness)
@@ -151,9 +155,22 @@ namespace TowerDefense.Level
             }
 
             var ret = new List<Pair<double, Genome>>(toCull.Count);
+
+            //Handle divide by 0 case
+            if (max_fitness == min_fitness)
+            {
+                foreach(var pair in toCull)
+                {
+                    ret.Add(new Pair<double, Genome>(pair.Value, pair.Key));
+                }
+                return ret;
+            }
+
+            
             foreach (var pair in toCull)
             {
-                var chance = pair.Value / max_fitness;
+                var squashed = (pair.Value - min_fitness) / (max_fitness - min_fitness);
+                var chance = System.Math.Pow(squashed, 1/CHANCE_BASE);
                 if (Random.value < chance || pair.Value == max_fitness)
                 {
                     ret.Add(new Pair<double, Genome>(pair.Value, pair.Key));

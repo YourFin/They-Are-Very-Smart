@@ -21,13 +21,20 @@ public class ZombieAttacker : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         if (other != null && other.gameObject != null && other.gameObject.GetComponent<Targetable>() != null)
-            toAttack.Add(other.gameObject.GetComponent<Targetable>());
+            try
+            {
+                toAttack.Add(other.gameObject.GetComponent<Targetable>());
+            }
+            catch { }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Targetable leavingTargetable = other.gameObject.GetComponent<Targetable>();
-        toAttack.Remove(leavingTargetable);
+        if (other != null && other.gameObject != null && other.gameObject.GetComponent<Targetable>() != null)
+        {
+            Targetable leavingTargetable = other.gameObject.GetComponent<Targetable>();
+            toAttack.Remove(leavingTargetable);
+        }
     }
 
     private void Update()

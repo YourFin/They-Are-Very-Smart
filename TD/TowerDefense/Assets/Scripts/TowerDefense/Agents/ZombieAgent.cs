@@ -195,7 +195,7 @@ namespace TowerDefense.Agents
             damageCollider.isTrigger = false;
             anim.SetTrigger("Dead");
             //Fixme, currently does position from origin instead of home base.
-            fitness += transform.position.magnitude * DISTANCE_FITNESS_SCALE;
+            fitness -= transform.position.magnitude * DISTANCE_FITNESS_SCALE;
         }
     }
 }
