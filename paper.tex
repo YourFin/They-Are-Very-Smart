@@ -249,11 +249,18 @@ The \texttt{mutation} function in Figure 8 essentially creates a new copy of the
 
 \subsubsection{GenomeManager}
 
-The GenomeManager class keeps track of game-wide genome management, i.e. selection and reproduction, as well as spawning Zombunnies and initiating new waves. The GenomeManager holds onto a collection of all genomes in a wave-by-wave list of hashmaps that map genomes to their fitness. The primary properties of the GenomeManager class can be seen in Figure 9, with various hardcoded constants that can be adjusted to influence general properties of the evolution, as well as the genomeMaps object, which contains the aforementioned collection of all genomes used in the course of evolution thus far.
+The \texttt{GenomeManager} class keeps track of game-wide state and genome tasks, i.e.
+selection and reproduction, as well as spawning Zombunnies and initiating new
+waves. The \texttt{GenomeManager} holds onto a collection of all genomes in a
+wave-by-wave list of hashmaps that map genomes to their fitness. The primary
+properties of the \texttt{GenomeManager} class can be seen in Figure 9, with various
+hardcoded constants that can be adjusted to influence general properties of the
+evolution, as well as the genomeMaps object, which contains the aforementioned
+collection of all genomes used in the course of evolution thus far.
 
 \imfig{GenomeManagerProperties}{Properties of the GenomeManager class}
 
-The initialization process of GenomeManager (see Figure 10) consists primarily of allocating the containing data structures for the various stages of the genome life cycle, followed by creating a first wave with randomized genomes and zero fitness. It should also be noted that we initialize our ZigguratGaussianSampler here from the Redzen library, which provides a fast way of generating normally-distributed floating-point numbers.
+The initialization process of \texttt{GenomeManager} (see Figure 10) consists primarily of allocating the containing data structures for the various stages of the genome life cycle, followed by creating a first wave with randomized genomes and zero fitness. It should also be noted that we initialize our \texttt{ZigguratGaussianSampler} here from the Redzen library, which provides a fast way of generating normally-distributed floating-point numbers.
 
 \imfig{GenomeManagerInit}{The GenomeManager initialization process}
 
@@ -261,7 +268,16 @@ Figure 11 shows the NextWave function, which handles the wave-to-wave portions o
 
 \imfig{GenomeManagerNextWave}{The NextWave method of GenomeManager}
 
-The Spawn method, as seen in Figure 12, is called at every SPAWN\_DELAY interval POPULATION\_COUNT times. The function starts by spawning a Zombunny with no genome due to the inability to provide parameters upon GameObject instantiation. Therefore, we set the genome after the fact, popping it off of the toSpawn stack, also adding the ZombieDied function to the removed event on said Zombunny, which allows us to execute code in the context of the GenomeManager upon Zombunny death; namely, ZombunnyDied. ZombunnyDied handles finding the fitness of Zombunnies and adding them to the list of completed genomes, as well as calling NextWave again when the last Zombunny in the wave dies.
+The \texttt{Spawn} method, as seen in Figure 12, is called at every
+\texttt{SPAWN\_DELAY} interval \texttt{POPULATION\_COUNT} times. The function
+starts by spawning a Zombunny with no genome due to the inability to provide
+parameters upon GameObject instantiation. Therefore, we set the genome after the
+fact, popping it off of the \texttt{toSpawn} stack, also adding the \texttt{ZombieDied} function
+to the removed event on said Zombunny, which allows us to execute code in the
+context of the \texttt{GenomeManager} upon Zombunny death; namely, \texttt{ZombunnyDied}.
+ZombunnyDied handles finding the fitness of Zombunnies and adding them to the
+list of completed genomes, as well as calling \texttt{NextWave} again when the last
+Zombunny in the wave dies.
 
 \imfig{GenomeManagerSpawn}{Spawning machinery of the GenomeManager class}
 
@@ -271,71 +287,97 @@ Redzen is a general-purpose utilities library for C\# that contains the fast ran
 
 \subsubsection{ZombieAgent}
 
-ZombieAgent is a GameObject which determines Zombunny behavior and stats from a genome and keeps track of fitness for each individual Zombunny. To do so, ZombieAgent pulls all the stat-determining values from the genome and applies them upon instantiation, i.e. setting health, damage, and speed as determined by the genome, as well as handling tick-to-tick operations during a Zombunny's lifetime. These tick-to-tick operations include choosing the next movement vector based on the location of nearby GameObjects and agents' current status.
+\texttt{ZombieAgent} is a \texttt{GameObject} which determines Zombunny behavior
+and stats from a genome and keeps track of fitness for each individual Zombunny.
+To do so, \texttt{ZombieAgent} pulls all the stat-determining values from the
+genome and applies them upon instantiation, i.e. setting health, damage, and
+speed as determined by the genome, as well as handling tick-to-tick operations
+during a Zombunny's lifetime. These tick-to-tick operations include choosing the
+next movement vector based on the location of nearby \texttt{Targetables} and agents' current status.
 
 \imfigH{ZombieAgent1}{ZombieAgent class parameters}
 
-In Figure 13, observe that the ZombieAgent class inherits from the Targetable class. Targetable is the parent class for every GameObject in the Action Game Framework, which can be automatically fired upon by ranged weapons, i.e. targeted. This also allows any existing defenses from the default game or any other targeting GameObject from the Action Game Framework to work without extra compatibility code. SINK\_SPEED and SINK\_TIME are constants used for death animation. velocity provides the Zombunny's current velocity for any consumers of the Targetable parent class. LastVelocity stores the previous movement vector as a PolarVector, in a format more congenial to the pathfinding algorithm. Fitness is an interface used to grab the effectiveness of this ZombieAgent at the end of its lifespan by the GenomeManager class. inVision keeps track of all nearby objects that the Zombunny can see for use in its pathfinding algorithm. the alignment is used for purposes of checking whether a Zombunny can damage other GameObjects, while visionCollider and damageCollider are the areas within which a Zombunny can see and deal damage from, respectively. The Rigidbody rigidBody handles physical collisions for movement purposes, while anim keeps track of the Zombunny's animation state, namely walking, idling, or death.
+In Figure 13, observe that the \texttt{ZombieAgent} class inherits from the
+\texttt{Targetable} class. \texttt{Targetable} is the parent class for every
+GameObject in the Action Game Framework that can be automatically
+fired upon by ranged weapons, i.e. targeted. This also allows any existing
+defenses from the default game or any other targeting GameObject from the Action
+Game Framework to work without extra compatibility code. \texttt{SINK\_SPEED} and
+\texttt{SINK\_TIME} are constants used for death animation. \texttt{velocity} provides the
+Zombunny's current velocity for any consumers of the \texttt{Targetable} parent class.
+\texttt{LastVelocity} stores the previous movement vector as a \texttt{PolarVector}, in a format
+more congenial to the pathfinding algorithm. \texttt{Fitness} is an interface used to
+grab the effectiveness of this \texttt{ZombieAgent} at the end of its lifespan by the
+\texttt{GenomeManager} class. \texttt{inVision} keeps track of all nearby objects that the
+Zombunny can see for use in its pathfinding algorithm. \texttt{alignment} is used for
+purposes of checking whether a Zombunny can damage other \texttt{Targetables}, while
+\texttt{visionCollider} and \texttt{damageCollider} are the areas within which a Zombunny can see
+and deal damage from, respectively. The Rigidbody \texttt{rigidBody} handles physical
+collisions for movement purposes, while \texttt{anim} keeps track of the Zombunny's
+animation state, namely walking, idling, or death.
 
 \imfig{ZombieAgentInit}{The Genome, Awake, and Start methods of the ZombieAgent class}
 
-In Figure 14, one can see the Genome, Awake, and Start methods of the
-ZombieAgent class. Genome instantiates a Zombunny's Genome object by pulling the
-var health from the given Genome, calling the SetMaxHealth and SetHealth
+In Figure 14, one can see the \texttt{Genome}, \texttt{Awake}, and \texttt{Start} methods of the
+\texttt{ZombieAgent} class. \texttt{Genome} instantiates a Zombunny's Genome object by pulling the
+health from the given \texttt{Genome,} calling the \texttt{SetMaxHealth} and \texttt{SetHealth}
 methods, and setting the initial velocity vector to have an initial direction of
 $270^\circ$\----that is, in the general direction of the player's base relative
-to the spawn location, and magnitude determined by the MovementSpeed variable
-from the given Genome. Awake calls the underlying (base) Awake function and adds
-custom OnDeath behavior to a Zombunny. Start initializes the inVision HashSet of
-Targetable objects, which keeps track of nearby visible GameObjects. In the
-unexpected case that genome or lastVelocity are null, Start initializes these to
+to the spawn location, and magnitude determined by the \texttt{MovementSpeed} variable
+from the given \texttt{Genome}. \texttt{Awake} calls the underlying (base) \texttt{Awake} function and adds
+custom \texttt{OnDeath} behavior to a Zombunny. \texttt{Start} initializes the \texttt{inVision} \texttt{HashSet} of
+\texttt{Targetable} objects, which keeps track of nearby visible \texttt{GameObjects}. In the
+unexpected (this is a concurrency issue) case that \texttt{genome} or \texttt{lastVelocity} are \texttt{null}, \texttt{Start} initializes these to
 default values (the "Zero" genome and a default velocity vector).
 
-\imfigH{ZombieAgentVision}{Methods for keeping track of GameObjects entering
-  and exiting a Zombunny's visionCollider}
+\imfigH{ZombieAgentVision}{Methods for keeping track of \texttt{GameObjects} entering
+  and exiting a Zombunny's \texttt{visionCollider}}
 
-Figure 15 shows the OnTriggerEnter and OnTriggerExit methods of the ZombieAgent
-class, which are used in conjunction with a Zombunny's visionCollider to update
-the inVision HashSet whenever a GameObject enters or exits the Zombunny's
-visionCollider radius.
+Figure 15 shows the \texttt{OnTriggerEnter} and \texttt{OnTriggerExit} methods of the \texttt{ZombieAgent}
+class, which are used in conjunction with a Zombunny's \texttt{visionCollider} to update
+the \texttt{inVision} \texttt{HashSet} whenever a \texttt{GameObject} enters or exits the Zombunny's
+\texttt{visionCollider} radius.
 
-\imfigH{ZombieAgentUpdateNearby}{The portion of the FixedUpdate method for
+\imfigH{ZombieAgentUpdateNearby}{The portion of the \texttt{FixedUpdate} method for
 determining the position of nearby objects relative to a Zombunny}
 
 Figure 16 shows the functions used to determine the position of GameObjects in
-inVision relative to a Zombunny's previous direction vector, stored as a
+\texttt{inVision} relative to a Zombunny's previous direction vector, stored as a
 dictionary of Targetables to PolarVectors. This allows a Zombunny to keep track
 of visible GameObjects relative to where it is currently facing.
 
-\imfig{ZombieAgentUpdateMovement}{The function of FixedUpdate that handles
+\imfig{ZombieAgentUpdateMovement}{The function of \texttt{FixedUpdate} that handles
   movement between ticks}
 
-Figure 17 shows the portion of FixedUpdate dedicated to altering a Zombunny's
-trajectory from tick to tick, calling the Rotate method of the lastVelocity
-PolarVector using the CalculateDirection method of the genome class, taking into
+Figure 17 shows the portion of \texttt{FixedUpdate} dedicated to altering a Zombunny's
+trajectory from tick to tick, calling the \texttt{Rotate} method of the \texttt{lastVelocity}
+\texttt{PolarVector} using the \texttt{CalculateDirection} method of the genome class, taking into
 account the Zombunny's previous velocity vector, time alive, current health, and
 the aforementioned dictionary of nearby GameObjects.
 
-\imfig{ZombieAgentUpdateDeath}{The portion of FixedUpdate that handles
+\imfig{ZombieAgentUpdateDeath}{The portion of \texttt{FixedUpdate} that handles
   death/deletion}
 
-Figure 18 shows the part of the FixedUpdate method which keeps track of Zombunny
+Figure 18 shows the part of the \texttt{FixedUpdate} method which keeps track of Zombunny
 death, destroying the Zombunny GameObject at the appropriate time and calling
 the relevant death animations. For every tick that a Zombunny is not dead,
-FixedUpdate increments timeAlive, which is later used as a factor in
+\texttt{FixedUpdate} increments \texttt{timeAlive}, which is later used as a factor in
 calculating fitness.
 
 \subsubsection{ZombieAttacker}
 
-The ZombieAttacker class (see Figure 19) calls Update on each tick, dealing damage to any item
-in toAttack, which is a HashSet of Targetable GameObjects that intersect with
+The \texttt{ZombieAttacker} class (see Figure 19) calls \texttt{Update} on each tick, dealing damage to any item
+in \texttt{toAttack}, which is a \texttt{HashSet} of \texttt{Targetable} GameObjects that intersect with
 a Zombunny's attack collider (see Figure 4). This way, a Zombunny can attack
-multiple GameObjects so long as they intersect with its attack collider. Damage
-is applied to items in toAttack by calling their individual takeDamage methods.
-Damage dealt is determined by the Zombunny's genome, and is passed as a parameter
-to takeDamage.
+multiple GameObjects so long as they intersect with its (tiny) attack collider.
+Ideally the Zombunny would only attack one other entitiy at a time, however
+attempting to do so results in a lot of edge cases and extra computational work,
+so we opted to attack everything in range. Damage
+is applied to items in \texttt{toAttack} by calling their individual
+\texttt{takeDamage} methods. The amount of damage dealt is determined by the Zombunny's genome, and is passed as a parameter
+to \texttt{takeDamage}.
 
-\imfig{ZombieAttacker}{The Update method of the ZombieAttacker class}
+\imfig{ZombieAttacker}{The \texttt{Update} method of the \texttt{ZombieAttacker} class}
 
 
 
