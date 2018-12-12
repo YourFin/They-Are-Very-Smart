@@ -202,12 +202,12 @@ the top of \path{Assets/Scripts/Evolution/Genome.cs}, \texttt{HEALTH\_SCALE},
 \texttt{SPAWN\_DELAY}, and \texttt{STARTING\_TOTAL}. The scale constants in
 \path{Genome.cs} change how health, speed, and damage are scaled relative to
 each other. \texttt{POPULATION\_SIZE} represents the number of genomes (and
-therefore zombunnies) in every generation. \texttt{MUTATION\_RATE} determines how
+therefore Zombunnies) in every generation. \texttt{MUTATION\_RATE} determines how
 much variance there is in every mutation operation. \texttt{GROWTH\_RATE}
 Determines how much combined speed, health, and damage is available to be
 distributed. \texttt{SPAWN\_DELAY} determines how much time passes between spawns
 in waves. \texttt{STARTING\_TOTAL} determines the total number of stats available
-to the zombunnies at the start of the game.
+to the Zombunnies at the start of the game.
 
 \subsubsection{PolarVector}
 The PolarVector class encapsulates the internal representation that we use for storing and passing vectors to the neural net, as well as keeping track of the previous direction a Zombunny was headed during the previous tick. The PolarVector class essentially wraps a float, direction (in degrees) and a float, magnitude, which provides sufficient information to create a new vector in two-dimensional space. The PolarVector class provides some convenient helper methods for converting between Cartesian and Polar coordinate systems, as the Unity engine primarily uses Cartesian coordinates.
