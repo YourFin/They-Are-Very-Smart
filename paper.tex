@@ -170,7 +170,12 @@ exploration, and narrative elements.
 %Insert picture of \textit{They Are Billions} gameplay here.%
 
 \section{Background}
-In \tavs, we utilize a basic genetic algorithm to train a recurrent neural network generated using the Neuroevolution of Augmenting Topologies (NEAT) method and \href{https://www.heatonresearch.com/encog/}{Encog} framework, which can be found \href{https://sharpneat.sourceforge.net/}{here}, which is a generalized deep-learning library that includes implementations of NEAT and HyperNEAT.
+In \tavs, we utilize a basic genetic algorithm to train a recurrent neural
+network generated using the Neuroevolution of Augmenting Topologies (NEAT)
+method (implemented in the \href{https://www.heatonresearch.com/encog/}{Encog}
+framework), which can be found \href{https://sharpneat.sourceforge.net/}{here},
+which is a generalized deep-learning library that includes implementations of
+a large number of NEAT and HyperNEAT.
 
 NEAT is particularly applicable to our issue because it allows the evolution of different topologies and weights in neural networks at the same time, unlike standard back-propagation learning, and is also well-suited for encoding into a genome for evolution. NEAT works by encoding a function that then generates a neural net, starting out with low complexity of topology, which can then evolve towards more complex topologies.
 
@@ -188,6 +193,22 @@ Double clicking on this file on any computer with Unity installed will open up
 the Unity editor with the context for this paper.
 
 \subsection{Code overview}
+\subsubsection{Hyperparameters}
+The hyperparameters relevant to playing with how the games are the constants at
+the top of \path{Assets/Scripts/Evolution/Genome.cs}, \texttt{HEALTH_SCALE},
+\texttt{DAMAGE_SCALE}, and \texttt{MOVEMENT_SCALE}; and at the top of
+\path{Assets/Scripts/TowerDefence/Level/GenomeManager.cs}, with
+\texttt{POPULATION_SIZE}, \texttt{MUTATION_RATE}, \texttt{GROWTH_RATE},
+\texttt{SPAWN_DELAY}, and \texttt{STARTING_TOTAL}. The scale constants in
+\path{Genome.cs} change how health, speed, and damage are scaled relative to
+each other. \texttt{POPULATION_SIZE} represents the number of genomes (and
+therefore zombunnies) in every generation. \texttt{MUTATION_RATE} determines how
+much variance there is in everey mutation operation. \texttt{GROWTH_RATE}
+Determines how much combined speed, health, and damage is available to be
+distributed. \texttt{SPAWN_DELAY} determines how much time passes between spawns
+in waves. \texttt{STARTING_TOTAL} determines the total number of stats available
+to the zombunnies at the start of the game.
+
 \subsubsection{PolarVector}
 The PolarVector class encapsulates the internal representation that we use for storing and passing vectors to the neural net, as well as keeping track of the previous direction a Zombunny was headed during the previous tick. The PolarVector class essentially wraps a float, direction (in degrees) and a float, magnitude, which provides sufficient information to create a new vector in two-dimensional space. The PolarVector class provides some convenient helper methods for converting between Cartesian and Polar coordinate systems, as the Unity engine primarily uses Cartesian coordinates.
 
