@@ -334,8 +334,27 @@ to takeDamage.
 
 \subsection{Genetic Algorithm}
 
-In \tavs,
+In \tavs, evolution is done in three steps: culling, reproduction, and mutation.
+To cull the genomes with low fitness, the entire range of genome values is
+compressed down on to the values from zero to one, and then fed through a square
+root function. The result is the probability that the given genome survives to
+the next wave. The square root function has the nice properties that it passes
+through \((1,1)\), so at least one genome will always survive, it passes through
+\((0,0)\), so at least one genome will die, and other values are scaled
+non-linearly such that only the really unfit genomes have a high probability of
+dying.
 
+The surviving genomes are then passed to the reproduction function, which
+selects a weighted random genome to duplicate and add to the next wave until
+the total is back up to the set population count. The randomness is weighted
+linearly; all of the genome fitnesses are summed, and then a random number is
+picked between 0 and this sum, effectively creating a ``bucket'' the size of the
+each fitness for the random number to choose between.
+
+The mutation phase takes the result of reproduction and adds a
+Gaussian-distributed random value to each characteristic of the Genome. The
+results are then passed to the game portion to be spawned as another wave of
+Zombunnies.
 
 %Overview
 %\begin{itemize}
