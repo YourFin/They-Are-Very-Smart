@@ -10,7 +10,7 @@ namespace Evolution
 {
     public class Genome
     {
-        private readonly static float HEALTH_SCALE = 1;
+        private readonly static float HEALTH_SCALE = 0.3f;
         private readonly static float DAMAGE_SCALE = 1;
         private readonly static float MOVEMENT_SCALE = 0.4f;
 
@@ -67,7 +67,7 @@ namespace Evolution
                 speed_scalar = (float)stat_array[0];
                 damage_scalar = (float)stat_array[1];
                 health_scalar = (float)stat_array[2];
-                MonoBehaviour.print($"Health: ({health_scalar}, {Health}), Damage: ({damage_scalar}, {Damage}), Speed: ({speed_scalar}, {MovementSpeed})");
+                //MonoBehaviour.print($"Health: ({health_scalar}, {Health}), Damage: ({damage_scalar}, {Damage}), Speed: ({speed_scalar}, {MovementSpeed})");
             }
         }
 

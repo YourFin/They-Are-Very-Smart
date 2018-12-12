@@ -112,7 +112,14 @@ namespace ActionGameFramework.Projectiles
 					}
 					foreach (Collider projectileCollider in m_Colliders)
 					{
-						Physics.IgnoreCollision(colliderToIgnore, projectileCollider, true);
+                        try
+                        {
+                            Physics.IgnoreCollision(colliderToIgnore, projectileCollider, true);
+                        } catch
+                        {
+                            //TODO: FIXME
+                        }
+						
 					}
 					m_CollidersIgnoring.Add(colliderToIgnore);
 				}

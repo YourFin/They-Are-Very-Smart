@@ -195,18 +195,18 @@ the Unity editor with the context for this paper.
 \subsection{Code overview}
 \subsubsection{Hyperparameters}
 The hyperparameters relevant to playing with how the games are the constants at
-the top of \path{Assets/Scripts/Evolution/Genome.cs}, \texttt{HEALTH_SCALE},
-\texttt{DAMAGE_SCALE}, and \texttt{MOVEMENT_SCALE}; and at the top of
+the top of \path{Assets/Scripts/Evolution/Genome.cs}, \texttt{HEALTH\_SCALE},
+\texttt{DAMAGE\_SCALE}, and \texttt{MOVEMENT\_SCALE}; and at the top of
 \path{Assets/Scripts/TowerDefence/Level/GenomeManager.cs}, with
-\texttt{POPULATION_SIZE}, \texttt{MUTATION_RATE}, \texttt{GROWTH_RATE},
-\texttt{SPAWN_DELAY}, and \texttt{STARTING_TOTAL}. The scale constants in
+\texttt{POPULATION\_SIZE}, \texttt{MUTATION\_RATE}, \texttt{GROWTH\_RATE},
+\texttt{SPAWN\_DELAY}, and \texttt{STARTING\_TOTAL}. The scale constants in
 \path{Genome.cs} change how health, speed, and damage are scaled relative to
-each other. \texttt{POPULATION_SIZE} represents the number of genomes (and
-therefore zombunnies) in every generation. \texttt{MUTATION_RATE} determines how
-much variance there is in everey mutation operation. \texttt{GROWTH_RATE}
+each other. \texttt{POPULATION\_SIZE} represents the number of genomes (and
+therefore zombunnies) in every generation. \texttt{MUTATION\_RATE} determines how
+much variance there is in every mutation operation. \texttt{GROWTH\_RATE}
 Determines how much combined speed, health, and damage is available to be
-distributed. \texttt{SPAWN_DELAY} determines how much time passes between spawns
-in waves. \texttt{STARTING_TOTAL} determines the total number of stats available
+distributed. \texttt{SPAWN\_DELAY} determines how much time passes between spawns
+in waves. \texttt{STARTING\_TOTAL} determines the total number of stats available
 to the zombunnies at the start of the game.
 
 \subsubsection{PolarVector}

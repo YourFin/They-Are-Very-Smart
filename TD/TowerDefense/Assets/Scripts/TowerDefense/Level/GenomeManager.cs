@@ -13,20 +13,20 @@ namespace TowerDefense.Level
         /// <summary>
         /// How many zombunnies to spawn
         /// </summary>
-        public static readonly int POPULATION_SIZE = 500;
+        public static readonly int POPULATION_SIZE = 200;
 
         /// <summary>
         /// The mutation rate
         /// </summary>
-        public static readonly float MUTATION_RATE = 0.2f;
+        public static readonly float MUTATION_RATE = 0.5f;
 
-        public static readonly float GROWTH_RATE = 0.3f;
+        public static readonly float GROWTH_RATE = 0.0f;
 
-        public static readonly float SPAWN_DELAY = .2f;
+        public static readonly float SPAWN_DELAY = .1f;
 
         private static readonly float STARTING_TOTAL = 16f;
 
-        private static readonly double INITIAL_FITNESS = 0.0;
+        private static readonly double INITIAL_FITNESS = 1.0;
 
         /// <summary>
         /// The prefab to spawn as an enemy
@@ -69,26 +69,36 @@ namespace TowerDefense.Level
             {
                 currentMap.Add(Genome.RandomGenome(sampler, STARTING_TOTAL), INITIAL_FITNESS);
             }
-            print(currentMap.Count);
             prefabAgent = ZombiePrefab.GetComponent<ZombieAgent>();
         }
 
         private void NextWave()
         {
-            var nextWave = new Stack<Genome>(POPULATION_SIZE);
-
             //Cull wave
             var culled = Cull(currentMap);
-            
-            // Reproduce Here! dict -> list
-            
 
-            foreach (var pair in currentMap)
+            //Reproduce and scramble order
+            var reproduced = Reproduce(culled);
+
+            // Mutate
+            var nextWave = mutate(reproduced);
+            print($"{currentMap.Count} {culled.Count} {reproduced.Count}");
+
+            //Calculate averages
+            float avg_speed = 0;
+            float avg_damage = 0;
+            float avg_health = 0;
+            foreach (var genome in nextWave)
             {
-                if (pair.Key == null) continue;
-                nextWave.Push(pair.Key.mutate(sampler, GROWTH_RATE));
+                avg_speed += genome.MovementSpeed;
+                avg_health += genome.Health;
+                avg_damage += genome.Damage;
             }
-            // Scramble list here
+            avg_speed /= POPULATION_SIZE;
+            avg_health /= POPULATION_SIZE;
+            avg_damage /= POPULATION_SIZE;
+
+            print($"Average Speed: {avg_speed}, Health: {avg_health}, Damage: {avg_damage}");
 
             //Reset values
             remaining_alive = POPULATION_SIZE;
@@ -100,6 +110,17 @@ namespace TowerDefense.Level
 
             //Spawn next wave
             InvokeRepeating("Spawn", SPAWN_DELAY, SPAWN_DELAY);
+        }
+
+        private Stack<Genome> mutate(Stack<Genome> genomes)
+        {
+            var nextWave = new Stack<Genome>(POPULATION_SIZE);
+            foreach (var genome in genomes)
+            {
+                if (genome == null) continue;
+                nextWave.Push(genome.mutate(sampler, GROWTH_RATE));
+            }
+            return nextWave;
         }
 
         private void Spawn()
@@ -128,11 +149,12 @@ namespace TowerDefense.Level
                     max_fitness = fitness;
                 }
             }
+
             var ret = new List<Pair<double, Genome>>(toCull.Count);
             foreach (var pair in toCull)
             {
                 var chance = pair.Value / max_fitness;
-                if (Random.value < chance)
+                if (Random.value < chance || pair.Value == max_fitness)
                 {
                     ret.Add(new Pair<double, Genome>(pair.Value, pair.Key));
                 }
@@ -149,7 +171,7 @@ namespace TowerDefense.Level
             {
                 sum_fitness += pair.First;
             }
-            for(int ii = 0; ii < POPULATION_SIZE - toReproduce.Count; ++ii)
+            for(int ii = 0; ii < POPULATION_SIZE - toReproduce.Count + 1; ++ii)
             {
                 double rand = Random.value * sum_fitness;
                 double last_pos = 0;
@@ -159,6 +181,8 @@ namespace TowerDefense.Level
                     last_pos += toReproduce[jj].First;
                     if (rand < last_pos) break;
                 }
+                //jj--;
+                //print($"{jj} {toReproduce.Count}");
                 unshuffled.Add(toReproduce[jj].Second);
             }
             foreach (var pair in toReproduce)
@@ -196,7 +220,6 @@ namespace TowerDefense.Level
         {
             --remaining_alive;
             currentMap.Add(agent.Genome, agent.Fitness);
-            print(remaining_alive);
             if (remaining_alive == 0)
             {
                 NextWave();

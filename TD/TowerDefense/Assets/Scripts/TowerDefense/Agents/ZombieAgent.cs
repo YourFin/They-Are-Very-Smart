@@ -18,6 +18,8 @@ namespace TowerDefense.Agents
         private readonly static float SINK_SPEED = 2.5f;
         private readonly static float SINK_TIME = 2.0f;
         private readonly static float STARVATION_DISTANCE = 40.0f;
+        private readonly static double DISTANCE_FITNESS_SCALE = 3.0;
+        private readonly static double DAMAGE_FITNESS_SCALE = 1.0;
 
         public override Vector3 velocity
         {
@@ -26,8 +28,12 @@ namespace TowerDefense.Agents
         }
         private PolarVector lastVelocity;
 
+        private double fitness;
         public double Fitness {
-            get { return this.damageDone; }
+            get
+            {
+                return this.fitness;
+            }
         }
 
         // Set of nearby objects
@@ -50,7 +56,7 @@ namespace TowerDefense.Agents
         // Increment total damage done over a zombie's lifetime
         public void addDamageDone(float increment)
         {
-            this.damageDone += increment;
+            fitness += increment * DAMAGE_FITNESS_SCALE;
         }
 
         // Get alignment of zombie with this.configuration.alignment
@@ -92,7 +98,7 @@ namespace TowerDefense.Agents
             target.y = 0;
             spawnPostition.y = 0;
             var difference = target - spawnPostition;
-            print($"Target: {target}, Spawn: {spawnPostition}, Difference: {difference}");
+            //print($"Target: {target}, Spawn: {spawnPostition}, Difference: {difference}");
             lastVelocity = PolarVector.fromVector3(difference);
             this.genome = genome;
             var health = genome.Health;
@@ -188,6 +194,8 @@ namespace TowerDefense.Agents
             rigidBody.isKinematic = true;
             damageCollider.isTrigger = false;
             anim.SetTrigger("Dead");
+            //Fixme, currently does position from origin instead of home base.
+            fitness += transform.position.magnitude * DISTANCE_FITNESS_SCALE;
         }
     }
 }
