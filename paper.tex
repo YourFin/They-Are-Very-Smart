@@ -210,7 +210,14 @@ in waves. \texttt{STARTING\_TOTAL} determines the total number of stats availabl
 to the Zombunnies at the start of the game.
 
 \subsubsection{PolarVector}
-The PolarVector class encapsulates the internal representation that we use for storing and passing vectors to the neural net, as well as keeping track of the previous direction a Zombunny was headed during the previous tick. The PolarVector class essentially wraps a float, direction (in degrees) and a float, magnitude, which provides sufficient information to create a new vector in two-dimensional space. The PolarVector class provides some convenient helper methods for converting between Cartesian and Polar coordinate systems, as the Unity engine primarily uses Cartesian coordinates.
+The PolarVector class encapsulates the internal representation that we use for
+storing and passing vectors to the neural net, as well as keeping track of the
+previous direction a Zombunny was headed during the previous tick. The
+PolarVector class essentially wraps a float, direction (in degrees) and a float,
+magnitude, which provides sufficient information to create a new vector in
+two-dimensional space. The PolarVector class provides some convenient helper
+methods for converting between Cartesian and Polar coordinate systems, as the
+Unity engine primarily uses Cartesian coordinates.
 
 %figure 5%
 \imfigB{PolarVector1}{The basics of PolarVector}
@@ -233,12 +240,12 @@ pathfinding neural net.
 
 In Figure 7, we can see the constants that are used to scale a Zombunny's
 health, movement speed, and damage, which need to be set manually as discussed
-in the hyperparameters sections. The Id field is used as a unique identifier if
+in the hyperparameters sections. The \texttt{Id} field is used as a unique identifier if
 genomes need to be looked up, and also ensures that every genome will hash differently.
 
 \imfig{Mutation}{Mutation procedure of the Genome class}
 
-The mutation function in Figure 8 essentially creates a new copy of the current genome, which is then nudged by normally distributed random numbers.
+The \texttt{mutation} function in Figure 8 essentially creates a new copy of the current genome, which is then nudged by normally distributed random numbers.
 
 \subsubsection{GenomeManager}
 
