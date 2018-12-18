@@ -19,7 +19,7 @@ namespace TowerDefense.Agents
         private readonly static float SINK_TIME = 2.0f;
         private readonly static float STARVATION_DISTANCE = 40.0f;
         private readonly static double DISTANCE_FITNESS_SCALE = 3.0;
-        private readonly static double DAMAGE_FITNESS_SCALE = 1.0;
+        private readonly static double DAMAGE_FITNESS_SCALE = 6.0;//1.0;
 
         public override Vector3 velocity
         {
@@ -32,7 +32,7 @@ namespace TowerDefense.Agents
         public double Fitness {
             get
             {
-                return this.fitness;
+                return this.fitness - transform.position.magnitude * DISTANCE_FITNESS_SCALE;
             }
         }
 
@@ -195,7 +195,8 @@ namespace TowerDefense.Agents
             damageCollider.isTrigger = false;
             anim.SetTrigger("Dead");
             //Fixme, currently does position from origin instead of home base.
-            fitness -= transform.position.magnitude * DISTANCE_FITNESS_SCALE;
+            //fitness -= transform.position.magnitude * DISTANCE_FITNESS_SCALE;
+            //MonoBehaviour.print("OnDeath Fitness: " + Fitness + " Distance: " + transform.position.magnitude);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace TowerDefense.Level
         private static readonly double INITIAL_FITNESS = 1.0;
 
         // Must be greater than 1
-        private static readonly double CHANCE_BASE = 5;
+        private static readonly double CHANCE_BASE = 0.5; //2; //5;
 
         /// <summary>
         /// The prefab to spawn as an enemy
@@ -144,21 +144,26 @@ namespace TowerDefense.Level
 
         private static List<Pair<double, Genome>> Cull(Dictionary<Genome, double> toCull)
         {
-            double max_fitness = toCull.GetEnumerator().Current.Value;
-            double min_fitness = toCull.GetEnumerator().Current.Value;
+            double max_fitness = double.NegativeInfinity; //toCull.GetEnumerator().Current.Value;
+            double min_fitness = double.PositiveInfinity; //toCull.GetEnumerator().Current.Value;
             foreach (var fitness in toCull.Values)
             {
                 if (fitness > max_fitness)
                 {
                     max_fitness = fitness;
                 }
+                if (fitness < min_fitness)
+                {
+                    min_fitness = fitness;
+                }
             }
 
             var ret = new List<Pair<double, Genome>>(toCull.Count);
-
+            MonoBehaviour.print("Min fitness = " + min_fitness + " Max fitness = " + max_fitness);
             //Handle divide by 0 case
             if (max_fitness == min_fitness)
             {
+                MonoBehaviour.print("Fitness: Min == Max");
                 foreach(var pair in toCull)
                 {
                     ret.Add(new Pair<double, Genome>(pair.Value, pair.Key));
@@ -193,7 +198,7 @@ namespace TowerDefense.Level
                 double rand = Random.value * sum_fitness;
                 double last_pos = 0;
                 int jj;
-                for(jj = 0; jj < toReproduce.Count; ++jj)
+                for(jj = 0; jj < toReproduce.Count - 1; ++jj)
                 {
                     last_pos += toReproduce[jj].First;
                     if (rand < last_pos) break;
@@ -235,6 +240,7 @@ namespace TowerDefense.Level
         //Callback function on zombunny death
         public void ZombieDied(ZombieAgent agent)
         {
+            //MonoBehaviour.print("ZombieDied Fitness: " + agent.Fitness);
             --remaining_alive;
             currentMap.Add(agent.Genome, agent.Fitness);
             if (remaining_alive == 0)
