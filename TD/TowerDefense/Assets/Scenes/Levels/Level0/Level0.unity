@@ -2083,9 +2083,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c5d76d875eb5c4da12ce047ea6c2ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZombiePrefab: {fileID: 0}
-  SpawnPoints: []
-  target: {fileID: 0}
+  ZombiePrefab: {fileID: 1914043274118626, guid: 02794d1be9bbddf4286032cc5ede4dc2,
+    type: 3}
+  SpawnPoints:
+  - {fileID: 1665966579}
+  - {fileID: 2101992188}
+  - {fileID: 987904289}
+  - {fileID: 246124834}
+  target: {fileID: 2091141324}
 --- !u!4 &953095976
 Transform:
   m_ObjectHideFlags: 0
@@ -3919,7 +3924,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2021180305}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20, y: -0.72, z: -20}
+  m_LocalPosition: {x: -15, y: -0.72, z: -17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 982631444}
@@ -3979,11 +3984,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   configuration:
-    maxHealth: 0
-    startingHealth: 0
+    maxHealth: 50
+    startingHealth: 50
     alignment:
-      unityObjectReference: {fileID: 0}
-  targetTransform: {fileID: 0}
+      unityObjectReference: {fileID: 11400000, guid: 2e20cdb38c63f4edf8ee385c50c089ce,
+        type: 2}
+  targetTransform: {fileID: 1530617942}
 --- !u!65 &2091141325
 BoxCollider:
   m_ObjectHideFlags: 0
