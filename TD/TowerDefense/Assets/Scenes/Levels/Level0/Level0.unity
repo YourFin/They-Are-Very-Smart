@@ -554,12 +554,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   intro: {fileID: 0}
   towerLibrary: {fileID: 11400000, guid: 903debecd58cf41dba3386585d538e1c, type: 2}
-  startingCurrency: 0
+  startingCurrency: 100
   currencyGainer:
     constantCurrencyAddition: 0
     constantCurrencyGainRate: 0
   alwaysGainCurrency: 0
-  homeBases: []
+  homeBases:
+  - {fileID: 2091141324}
   environmentColliders: []
   genomeManager: {fileID: 953095975}
 --- !u!114 &290749997
@@ -1498,6 +1499,10 @@ PrefabInstance:
     - target: {fileID: 224633832035416238, guid: f2c84fb68fbea4461b4b20d53d70213c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999291114898188, guid: f2c84fb68fbea4461b4b20d53d70213c, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3812,22 +3817,22 @@ PrefabInstance:
     - target: {fileID: 114348589391522652, guid: 28035762430e74813854d9ca46df3ebd,
         type: 3}
       propertyPath: mapSize.x
-      value: -39.52199
+      value: -39.551525
       objectReference: {fileID: 0}
     - target: {fileID: 114348589391522652, guid: 28035762430e74813854d9ca46df3ebd,
         type: 3}
       propertyPath: mapSize.y
-      value: -18.305058
+      value: -18.31297
       objectReference: {fileID: 0}
     - target: {fileID: 114348589391522652, guid: 28035762430e74813854d9ca46df3ebd,
         type: 3}
       propertyPath: mapSize.width
-      value: 80.000824
+      value: 79.99118
       objectReference: {fileID: 0}
     - target: {fileID: 114348589391522652, guid: 28035762430e74813854d9ca46df3ebd,
         type: 3}
       propertyPath: mapSize.height
-      value: 67.59023
+      value: 67.57286
       objectReference: {fileID: 0}
     - target: {fileID: 114396145335444582, guid: 28035762430e74813854d9ca46df3ebd,
         type: 3}
