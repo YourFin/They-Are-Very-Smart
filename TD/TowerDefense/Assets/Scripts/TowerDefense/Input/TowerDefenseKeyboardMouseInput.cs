@@ -81,8 +81,8 @@ namespace TowerDefense.Input
 			
 			// place towers with keyboard numbers
 			if (LevelManager.instanceExists)
-			{
-				int towerLibraryCount = LevelManager.instance.towerLibrary.Count;
+            { 
+                int towerLibraryCount = LevelManager.instance.towerLibrary.Count;
 
 				// find the lowest value between 9 (keyboard numbers)
 				// and the amount of towers in the library
