@@ -13,6 +13,9 @@ namespace Evolution
         private readonly static float HEALTH_SCALE = 0.3f;
         private readonly static float DAMAGE_SCALE = 1;
         private readonly static float MOVEMENT_SCALE = 0.4f;
+        private readonly static float HEALTH_OFFSET = 0.5f;
+        private readonly static float DAMAGE_OFFSET = 0.5f;
+        private readonly static float MOVEMENT_OFFSET = 1;
 
         private static ActivationSoftMax softMax;
 
@@ -33,7 +36,7 @@ namespace Evolution
         private float health_scalar;
         public float Health {
             get {
-                return HEALTH_SCALE * health_scalar * totalStats;
+                return HEALTH_SCALE * health_scalar * totalStats + HEALTH_OFFSET;
             }
         }
 
@@ -41,7 +44,7 @@ namespace Evolution
         private float damage_scalar;
         public float Damage {
             get {
-                return DAMAGE_SCALE * damage_scalar * totalStats;
+                return DAMAGE_SCALE * damage_scalar * totalStats + DAMAGE_OFFSET;
             }
         }
 
@@ -49,7 +52,7 @@ namespace Evolution
         private float speed_scalar;
         public float MovementSpeed {
             get {
-                return MOVEMENT_SCALE * speed_scalar * totalStats;
+                return MOVEMENT_SCALE * speed_scalar * totalStats + MOVEMENT_OFFSET;
             }
         }
 

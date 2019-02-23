@@ -13,7 +13,7 @@ namespace TowerDefense.Level
         /// <summary>
         /// How many zombunnies to spawn
         /// </summary>
-        public static readonly int POPULATION_SIZE = 500;
+        public static readonly int POPULATION_SIZE = 200;
 
         /// <summary>
         /// The mutation rate
