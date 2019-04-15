@@ -1,0 +1,3 @@
+[submodule "TD/TowerDefense/Assets/Scripts/Util/Nd-ES-Hyperneat"]
+	path = TD/TowerDefense/Assets/Scripts/Util/3d-ES-Hyperneat
+	url = git@github.com:YourFin/Nd-ES-Hyperneat.git
